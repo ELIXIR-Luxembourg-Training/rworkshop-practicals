@@ -369,9 +369,7 @@
     "knitr": {
       "Package": "knitr",
       "Version": "1.36",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "46344b93f8854714cdf476433a59ed10"
+      "Source": "Repository"
     },
     "labeling": {
       "Package": "labeling",
@@ -407,6 +405,11 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "41287f1ac7d28a92f0a286ed507928d3"
+    },
+    "markdown": {
+      "Package": "markdown",
+      "Version": "1.1",
+      "Source": "Repository"
     },
     "mgcv": {
       "Package": "mgcv",
@@ -558,9 +561,7 @@
     "rmarkdown": {
       "Package": "rmarkdown",
       "Version": "2.11",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "320017b52d05a943981272b295750388"
+      "Source": "Repository"
     },
     "rstudioapi": {
       "Package": "rstudioapi",

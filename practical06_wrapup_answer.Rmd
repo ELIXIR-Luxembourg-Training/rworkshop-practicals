@@ -1,0 +1,169 @@
+---
+title: "My answers"
+author: "My name"
+date: "2021-10-22"
+output: html_document
+---
+
+
+
+
+>This practical connects most lectures and practicals covered in the course as they would work together for a typical data analysis with data import, transformation, summarizing and plotting.
+
+# Carbon dixoide plant intake
+
+The dataset is from the paper by **Potvin, C., Lechowicz, M. J. and Tardif, S.** (1990). The statistical analysis of ecophysiological response curves obtained from experiments involving repeated measures., _Ecology_, **71**, 1389–1400. You can find it at this [URL](https://biostat2.uni.lu/practicals/data/CO2.tsv)
+
+## Load the data
+
+##### Load the [dataset](https://biostat2.uni.lu/practicals/data/CO2.tsv), assign the name `plant_CO2`
+
+```{block, opts.label = "tip"}
+Pay attention to use meaningful names. 
+`plant_CO2_url` is a good name for the URL of this dataset.
+`plant_CO2_file` is appropriate for tsv file if you download it.
+```
+
+
+
+
+```{r}
+# Write your answer here
+```
+
+## Explore the data
+
+##### How many rows and columns are present? And which data types are they?
+
+```{r}
+# Write your answer here
+```
+
+
+##### Three columns are categorical, taken together, how many observations have they?
+
+```{block, opts.label = "tip"}
+Using `count()` with the relevant columns is the easiest approach.
+Sorting by the highest number is often a nice way to discover the data.
+This option is available in `count()`
+```
+
+```{r}
+# Write your answer here
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+##### How many categories for each of the character columns do you find?
+
+```{block, opts.label = "tip"}
+One option is to find the number of unique values using `n_distinct()`.
+This would have to be done three times, one for each character column. 
+Otherwise, `n_distinct()` can be applied to character columns using
+`across()` and relevant `where()` condition.
+```
+
+```{block, opts.label = "warning"}
+`n_distinct()`, `across()`  are functions that work **inside** `mutate()` or `summarise()`.
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### Rename the columns to make them all lower case and continue with the resulting tibble for the next steps.
+
+```{r}
+# Write your answer here
+```
+
+
+## CO<sub>2</sub> data
+
+The numeric columns are defined as:
+
+- `conc` is ambient carbon dioxide concentrations ($mL/L$).
+- `uptake` is carbon dioxide uptake rates ($umol/m^2$ sec).
+
+##### Compute the mean of `conc` and `uptake` depending on the location (Quebec or Mississippi)
+
+```{block, opts.label = "tip"}
+Ignore the treatment, chilled or / non chilled for now
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### Does the CO<sub>2</sub> concentrations appear different in both locations?
+
+```{r}
+# Write your answer here
+```
+
+
+##### Compute the mean of `conc` and `uptake` depending on the plant location (`type` column), `plant` and treatment. Add the number of observations per group.
+
+```{block, opts.label = "tip"}
+the number of observations should be **7** everywhere as you saw before
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### From the summary above, sort the table to show the plant / location / treatment that uptake the most carbon dioxide
+
+```{block, opts.label = "tip"}
+a descending ordering is possible with `desc(mean_uptake)` in the `arrange()` function
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+It is hard to see if all plants have both treatment, you can pivot the table to find out. Right now the table after summarisation is in the **long** format. Pivoting means converting the table to the **wide format** using the treatment unique values (**chilled** and **nonchilled**) as new columns and filled with the values taken from the `mean_uptake` column.
+
+##### Pivot the table using `plant` and `type` as ids, names from `treatment` and values from the mean of carbon dioxide uptake
+
+```{block, opts.label = "tip"}
+look up the different arguments of the function `tidyr::pivot_wider()`
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+##### What do you conclude, does the same plant have been assessed for both treatment?
+
+```{r}
+# Write your answer here
+```
+
+
+## Visualize the location and CO<sub>2</sub> uptake
+
+Numbers are nice but plotting the data might better reveal how location and treatment relate.
+
+##### Plot the CO<sub>2</sub> uptake in function of plant location, using violin plots filled by treatment {.bonus}
+
+```{r}
+# Write your answer here
+```
+
+
+As a motivation, here is one version of the plot:
+
+
+

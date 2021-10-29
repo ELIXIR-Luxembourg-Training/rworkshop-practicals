@@ -1,0 +1,151 @@
+---
+title: "My answers"
+author: "My name"
+date: "2021-10-22"
+output: html_document
+---
+
+
+
+
+
+
+> In this practical, you'll learn how to import flat files using the `readr` package
+
+
+##### Those kind of questions are optional {.bonus}
+
+# Before you start
+
+
+To perform reproducible research it is a good practice to store the files in a standardized location. For example, you could take advantage of the RStudio projects and store data files in a sub-folder called `data`.
+
+If you did not create an Rstudio project yet, **create a RStudio project** now.
+
+##### Prepare your project's folder
+
+1. Check that the project is active: the name you chose should appear on the top-right corner.
+    
+2. Create a folder named `data` within your project's folder. Use the `Files` pane in the lower right Rstudio panel or your favorite file browser.
+
+3. Download the file [`blood_fat.csv`](https://biostat2.uni.lu/practicals/data/blood_fat.csv) and place it in the `data` sub-folder you just created.
+
+
+4. Create a new **Rmarkdown** file, save it at the project root with a relevant name.
+
+5. Add a code chunk and with those lines to load the libraries. You don't need to install the packages if those lines are working fine
+
+~~~
+library(dplyr)
+library(readr)
+~~~
+
+
+6. Don't forget to run the chunk's code to load the library during your interactive session
+
+```{block, opts.label = "warning"}
+If you load the library only in the console and forget to place a chunk to load it, the knitting process will fail. Indeed, when you click on the `knit` button, the chunks are evaluated in a new and fresh environment.
+```
+
+# Use `readr` to load your first file
+
+
+##### Load the `blood_fat` file
+
+```{block, opts.label = "tip"}
+the relative path can be safely built using `"data/blood_fat.csv"` 
+if you followed the preliminary steps above, download the csv in a sub-folder `data` of a RStudio project
+
+For example, you folder structure could be (depending on the picked names). Here:
+
+- RStudio project is `Rworkshop`
+- Rmarkdown document is `practical02_import.Rmd`
+
+~~~
+.
+├── data
+│   └── blood_fat.csv
+├── practical03_import.Rmd
+└── Rworkshop.Rproj
+~~~
+
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+
+`read_delim()` execution is reporting the dimensions of the file, along with the guessed delimiter and data type of each columns
+
+If we are happy with the guessed delimiter and the column names / types, we could silent this reporting.
+
+##### Load again the same file, silencing the `read_delim()` message
+
+```{r}
+# Write your answer here
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+## The tibble
+
+`read_delim()` loads the data as a tibble. The main advantage to use tibbles over a regular data frame is the printing.
+
+- Tibbles show some useful information such as the number of rows and columns:
+    + Look at the top of the tibble and find the information "A tibble rows x cols"
+    + How many rows are in the tibble?
+- The columns of a tibble report their type:
+    + Look at the tibble header, the type of a columns is reported just below its name.
+    + What is the type of the `age` column?
+    
+```{r}
+# Write your answer here
+```
+
+
+
+Actually, both `age` and `id` are **integers**, and should be read as such.
+
+##### Read the `blood_fat.csv` specifying the data types of `age` and `id` as integers
+
+
+```{block, opts.label = "tip"}
+In the `col_types = c(....)` you can use the columns bare names and either the long description
+ to call the specific data type like `col_integer()` or the shortcut `"i"`
+```
+
+```{r}
+# Write your answer here
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+##### Read the `blood_fat.csv` specifying the data types of `age` and `id` as integers, skipping `weight`
+
+```{r}
+# Write your answer here
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+##### One summarisation: compute the **mean** of both the `age` and `weight` per `group` {.bonus}
+
+```{r}
+# Write your answer here
+```
+

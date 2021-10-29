@@ -1,0 +1,360 @@
+---
+title: "My answers"
+author: "My name"
+date: "2021-10-22"
+output: html_document
+---
+
+
+
+
+
+> This practical aims at performing exploratory plots and how-to build layer by layer to be familiar with
+the grammar of graphics. In the last part, a supplementary exercise will focus on plotting genome-wide CNV. 
+
+##### Those kind of questions are optional {.bonus}
+
+# Categorical data
+
+We are going to use the built-in dataset called `ToothGrowth`. This dataset contains the teeth length of 60 guinea pigs which received 3 different doses of vitamin C (in mg/day), delivered either by orange juice (`OJ`) or ascorbic acid (`VC`). As for every (or near to every) function, most datasets shipped with a library contain also a useful help page (`?ToothGrowth`).
+
+##### Is this dataset tidy?
+
+```{r}
+# Write your answer here
+```
+
+
+##### Plot the distributions as boxplots of the teeth lengths by the `dose` type received
+
+```{block, opts.label = "tip"}
+- `dose` needs to be a categorical data. You can convert it with `factor()`
+- `geom_boxplot()` requires 2 aesthetics
+    + `x` must be **categorical / discrete** (see first item)
+    + `y` **must be continuous**
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### Attribute a filling colour to each delivery method (`supp` column)
+
+```{r}
+# Write your answer here
+```
+
+
+When the dataset is tidy, it is easy to draw a plot telling us the story: vitamin C affects the teeth growth and the delivery method is only important for lower concentrations.
+
+Boxplots are nice but misleading. The size of the dataset is not visible and the shapes of distributions could be better represented.
+
+`violins` allow a better view of the distribution shapes.
+
+##### Plot the distributions as violins of the teeth lengths by the `dose` type received
+
+```{block, opts.label = "tip"}
+- do **not** use the `supp` variable, we want only 3 violins, one for each dose.
+
+Set the option `trim = FALSE` to the `geom_violin()` to display distribution extremities
+```
+
+```{r}
+# Write your answer here
+```
+
+
+Now we are missing summary values like the medians which are shown on boxplots. We should add them.
+
+##### Add the median using the layer `geom_point(stat = "summary")` to the previous plot
+
+```{block,  opts.label = "tip"}
+Specify the `fun = "median"` and appropriate `size`, `colour` to get a big red dot representing the median
+
+You can use a trick to get a quick legend without using strings in aesthetics. 
+This will create a legend named with the string used. Concretely, `aes(colour = "median")`
+can be used, and specifying a manual red color with `scale_color_manual(values = "red")` will 
+enforce the red colour to the median dots.
+```
+
+```{r}
+# Write your answer here
+```
+
+
+Of note, a `ggplot` extension named `ggbeeswarm` proposes a very neat dotplot that fits the distribution.
+
+
+
+```{r}
+# Write your answer here
+```
+
+# Scatter plots of penguins
+
+The `penguins` dataset is provided by the `palmerpenguins` R package. As for every function, most data-sets shipped with a package contain also a useful help page (`?`).
+
+##### If not done already, install the package `palmerpenguins` and load it.
+
+```{r}
+# Write your answer here
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### Plot the body mass on the _y_ axis and the bill length on the _x_ axis.
+
+```{r}
+# Write your answer here
+```
+
+
+##### Plot again the body mass on the _y_ axis and the bill length on the _x_ axis, but with colour by `species`
+
+```{r}
+# Write your answer here
+```
+
+
+
+
+##### The `geom_smooth()` layer can be used to add a trend line. Try to overlay it to your scatter plot.
+
+```{block, opts.label = "tip"}
+by default `geom_smooth` is using a loess regression (< 1,000 points) and adds standard error intervals. 
+
+- The `method` argument can be used to change the regression to a linear one: `method = "lm"`
+- to disable the ribbon of standard errors, set `se = FALSE`
+
+Be careful where the aesthetics are located, so the trend linear lines are **also** colored per species.
+```
+
+```{r}
+# Write your answer here
+```
+
+
+
+##### Adjust the aesthetics of point in order to
+
+- the `shape` map to the originated `island`
+- a fixed size of `3`
+- a transparency of 40%
+
+```{block,  opts.label = "tip"}
+You should still have only 3 coloured linear trend lines. Otherwise check to which layer your are adding the aesthetic `shape`.
+Remember that fixed parameters are to be defined outside `aes()`
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### Ajust the colour aesthetic to the `ggplot()` call to propagate it to both point and regression line.
+Try the scale colour viridis for discrete scale (`scale_colour_viridis_d()`). Try to change the default theme to `theme_bw()`
+
+```{r}
+# Write your answer here
+```
+
+
+##### Find a way to produce the following plot:
+
+
+```{r}
+# Write your answer here
+```
+
+
+```{block,  opts.label = "tip"}
+Remember that:
+
+- all aesthetics defined in the `ggplot(aes())` command will be inherited by all following layers
+- `aes()` of individual geoms are specific (and overwrite the global definition if present).
+- `labs()` controls of plot annotations
+- `theme()` allows to tweak the plot like `theme(plot.caption = element_text(face = "italic"))` to render in italic the caption
+```
+
+
+# Supplementary exercises
+
+##### Genome-wide copy number variants (CNV) detection {.bonus}
+
+Let's have a look at a real output file for CNV detection. The used tool is called **Reference Coverage Profiles**: [RCP](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4330915/). 
+
+It was developed by analyzing the depth of coverage in over 6000 high quality (>40×) genomes.
+
+In the end, for every _kb_ a state is assigned 
+and similar states are merged eventually.
+
+**state** means:
+
+- 0, no coverage
+- 1, deletion
+- 2, expected diploidy
+- 3, duplication
+- 4, > 3 copies
+
+## Reading data
+
+The file is accessible [here](http://biostat2.uni.lu/practicals/data/CNV.seg).
+
+`CNV.seg` has 5 columns and the first 10 lines look like:
+
+![CNV](https://i.imgur.com/vzU4omM.png)
+
+##### Load the file [`CNV.seg`](http://biostat2.uni.lu/practicals/data/CNV.seg) in R, assign to the name `cnv` {.bonus}
+
+```{block, opts.label = "warning"}
+several issues must be fixed:
+
+- lines starting by a hash (comment) should be discarded. You can specify in `vroom` `comment = '#'` or `skip = 2L`
+- first and last column names are unclean. `#chrom` contains a hash and `length (kb)`. Would be neater to fix this upfront.
+
+By skipping the 2 first lines, we need to redo the header manually, avoiding `vroom` to use a data line as header.
+
+- specify a character vector of length 5 to `col_names = ` to create the header 
+```
+
+```{r}
+# Write your answer here
+```
+
+
+## Exploratory plots
+
+##### Plot the counts of the different states. We expect a majority of diploid states.  {.bonus}
+
+```{r}
+# Write your answer here
+```
+
+
+##### Plot the counts of the different states per chromosome. Might be worth freeing the **count** scale.  {.bonus}
+ 
+```{r}
+# Write your answer here
+```
+
+
+##### Using the previous plot, reorder the levels of chromosomes to let them appear in the karyotype order (1:22, X, Y)  {.bonus}
+
+```{block,  opts.label = "tip"}
+we could explicitly provide the full levels lists in the desired order. 
+
+However, in the tibble, the chromosomes appear in the wanted order.
+
+See the `fct_inorder()` function in the **forcats** package to take advantage of this.
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### Sexual chromosomes are not informative, collapse them into a **gonosomes** level  {.bonus}
+
+```{block,  opts.label = "tip"}
+See the `fct_collapse()` function in the **forcats**
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### plot the genomic segments length per state
+
+```{block,  opts.label = "tip"}
+- The distributions are completely skewed: transform to log-scale to get a decent plot.
+- Add the summary `mean` and `median` with colored hyphens using the **ToothGrowth** example
+
+Of note, `shape = 95` for dots is an hyphen shape.
+```
+
+```{r}
+# Write your answer here
+```
+
+
+## Count gain / loss summarising events per chromosome
+
+##### Filter the tibble only for *autosomes* and remove segments with no coverage and diploid (_i.e_ states 0 and 2 respectively). Save as `cnv_auto`.  {.bonus}
+
+```{r}
+# Write your answer here
+```
+
+
+##### We are left with state 1 and 3 and 4. Rename **1** as _loss_ and the others as _gain_ {.bonus}
+
+##### Count the events per chromosome and per state  {.bonus}
+
+##### For _loss_ counts, set them to negative so the barplot will be display up / down. Save as `cnv_auto_chr`   {.bonus}
+
+```{r}
+# Write your answer here
+```
+
+
+##### Plot `cnv_auto_chr` using the count as the `y` variable {.bonus}
+
+```{r}
+# Write your answer here
+```
+
+
+this is the final plot, where the following changes were made:
+
+- labels of the `y` axis in absolute numbers
+- set `expand = c(0, 0)` on the `x` axis. see [stackoverflow's answer](http://stackoverflow.com/a/22945857/1395352)
+- use `theme_classic()`
+- set the legend on the top right corner. Use a mix of `legend.position` and `legend.justification` in a `theme()` call.
+- remove the label of the `x` axis, you could use _chromosomes_ if you prefer
+- change the color of the fill argument with `c("springgreen3", "steelblue2")`
+
+
+It is now obvious that we have mainly huge **deletions** on chromosome 10 and **amplifications** on chromosome 11.
+
+
+In order to plot the genomic localisations of these events, we want to focus on the main chromosomes that were
+affected by amplifications/deletions.
+
+##### Lump the chromsomes by the number of CNV events (states 1, 3 or 4) keeping the 5 top ones and plot the counts {.bonus}
+
+
+```{block,  opts.label = "tip"}
+the function `fct_lump` from _forcats_ ease lumping. Just pick `n = 5` to get the top 5 chromosomes 
+```
+
+```{r}
+# Write your answer here
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+
+## Genomic plot of top 5 chromosomes
+
+##### Plot the genomic localisations of CNV on the 5 main chromosomes {.bonus}
+
+
+```{r}
+# Write your answer here
+```
+
+
+```{r}
+# Write your answer here
+```
+
+

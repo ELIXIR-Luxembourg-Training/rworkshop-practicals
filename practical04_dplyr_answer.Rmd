@@ -1,0 +1,123 @@
+---
+title: "My answers"
+author: "My name"
+date: "2021-10-22"
+output: html_document
+---
+
+
+
+
+### Judgment
+This short tutorial will allow you to explore `dplyr` functionality based on the previous lecture. Every question can be answered with a combination of `%>%` pipes. You should refrain from using temporary variables and statements outside of the range of the tidyverse.  
+
+##### Import the [data from the website](  https://biostat2.uni.lu/practicals/data/judgments.tsv). 
+Assign to the name `judgments`
+
+```{r}
+# Write your answer here
+```
+
+
+##### Use `glimpse()` to identify columns and column types.
+
+##### Select all columns that refer to the STAI questionnaire
+
+```{r}
+# Write your answer here
+```
+
+
+##### Select all subjects older than 25
+
+```{r}
+# Write your answer here
+```
+
+
+##### Retrieve all subjects younger than 20 which are in the stress group
+The column for the group is `condition`.
+
+```{r}
+# Write your answer here
+```
+
+
+##### Abbreviate the gender column such that only the first character remains
+
+```{r}
+# Write your answer here
+```
+
+
+##### Normalize the values in the REI group
+Divide all entries in the REI questionnaire by 5, the maximal value.
+
+```{r}
+# Write your answer here
+```
+
+
+##### Find the moral dilemma with the highest average score across all participants.
+  
+The result should be a tibble containing the dilemma and the average such that the dilemma with the highest average in the first row. 
+
+```{r}
+# Write your answer here
+```
+
+
+### Genetic variants
+
+##### Clean the table of genetic *variants* such that all variants appear as a column labeled by their position. 
+The format in the input is the reference allele, the position and the variant, commonly called alternative allele. In `T6G`, `T` is the reference allele, `6` is the position (along the gene) and `G` is the variant allele. 
+```{r}
+variants <- tribble(
+  ~sampleid, ~var1, ~var2, ~var3,
+  "S1", "A3T", "T5G", "T6G",
+  "S2", "A3G", "T5G", NA,
+  "S3", "A3T", "T6C", "G10C",
+  "S4", "A3T", "T6C", "G10C"
+)
+
+```
+
+The table should look something like this.
+
+
+
+```{r}
+# Write your answer here
+```
+
+
+#### Select relevant variants
+
+Genetic variants are labeled acording to their effect on stability of the gene product.  
+
+##### Select the subjects in table *variants* that carry variants labeled as *damaging*. 
+The final output should be vector of sample ids.
+
+```{r}
+variant_significance <- tribble(
+  ~variant, ~significance,
+  "A3T", "unknown",
+  "A3G", "damaging",
+  "T5G", "benign",
+  "T6G", "damaging",
+  "T6C", "benign",
+  "G10C", "unknown"
+)
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### Try using semi-join to achieve the same result. {.bonus}
+
+```{r}
+# Write your answer here
+```
+

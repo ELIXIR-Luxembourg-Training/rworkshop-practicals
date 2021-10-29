@@ -26,14 +26,14 @@ Currently it is the following:
 ---
 title: "Datasaurus"
 author: "Aurelien Ginolhac"
-date: "2021-22-11"
+date: "2021-23-11"
 ---
 ~~~
 
 Your tasks:
 
 - Replace the author name by yours
-- Fix the date for today follwing the ISO8610 norm: `YYYY-MM-DD`
+- Fix the date for today following the ISO8610 norm: `YYYY-MM-DD`
 - Save the file
 - Commit the changes
 - Push to the github classroom

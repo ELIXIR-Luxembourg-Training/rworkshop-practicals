@@ -1,5 +1,5 @@
-# r-datasaurus
-For teaching
+# Rworkshop
+For the [rtidyverse](https://rworkshop.uni.lu) workshop 
 
 
 ### Installation
@@ -9,6 +9,6 @@ For teaching
 2. Activate renv by running `renv::activate()`. You might need to install `renv` by running `install.packages("renv")`.
 3. Run `renv::restore()` to install the package with the version.
 
-4. Open the .Rmd document and make yourself familiar with the instructions. 
+5. The first tutorial (datasauRus) will be guided and demonstrate capacities in the tidyverse which we will explore in the workshop.
 
-5. The tutorial will be guided and demonstrate some capacities in R which we will explore in the following.
+6. The other practicals are yours to complete and push to the repository. 

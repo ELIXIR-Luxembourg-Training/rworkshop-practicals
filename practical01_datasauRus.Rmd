@@ -1,22 +1,21 @@
 ---
-title: "My answers"
-author: "My name"
-date: '`r format(Sys.time(), "%d %B, %Y")`'
+title: "Datasaurus"
+author: "Aurelien Ginolhac"
+date: '2021-22-11'
 output: html_document
 ---
 
-```{r setup}
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-
+library(datasauRus)
+library(knitr)
+ds_dozen <- datasaurus_dozen
 ```
-
-
 
 This guided practical will demonstrate that the **tidyverse** allows to compute summary statistics and visualize datasets efficiently.
 This dataset is already stored in a **tidy** `tibble`, cleaning steps will come in future practicals.
-
-##### Those kind of questions are optional {.bonus}
 
 ## `datasauRus` package
 
@@ -29,45 +28,57 @@ library(datasauRus)
 - should return nothing. If `there is no package called ‘datasauRus’` appears, it means that the package needs 
 to be installed. Use this:
 
+```{r, eval=FALSE}
+install.packages("datasauRus")
+```
 
 ## Explore the dataset
 
 Since we are dealing with a `tibble`, we can type
 
+```{r, eval = FALSE}
+datasaurus_dozen
+```
 
 
 only the first **10** rows are displayed.
 
+```{r, echo = FALSE}
+datasaurus_dozen %>%
+  head(10) %>%
+  kable()
+```
 
 ##### What are the dimensions of this dataset? Rows and columns?
 
 - **base** version, using either `dim()`, `ncol()` and `nrow()`
 
-```{r}
-# Write your answer here
+```{r, solution = TRUE}
+# dim() returns the dimensions of the data frame, i.e number of rows and columns
+dim(datasaurus_dozen)
+# ncol() only number of columns
+ncol(datasaurus_dozen)
+# nrow() only number of rows
+nrow(datasaurus_dozen)
 ```
-
 
 - **tidyverse** version
 
-```{r}
-# Write your answer here
+```{block, solution = TRUE}
+nothing to be done, a `tibble` display its dimensions, starting by a comment ('#' character)
 ```
-
 
 ##### Assign the `datasaurus_dozen` to the `ds_dozen` name. This aims at populating the **Global Environment**
 
 ```{r}
-# Write your answer here
+ds_dozen <- datasaurus_dozen
 ```
-
 
 ##### Using Rstudio, those dimensions are now also reported within the interface, where?
 
-```{r}
-# Write your answer here
+```{block, solution = TRUE}
+in the Environment panel -> Global Environment
 ```
-
 
 ## How many datasets are present?
 
@@ -78,10 +89,9 @@ You want to count the number of **unique** elements in the column **dataset**. T
 The function **length()** returns the length of a vector, such as the unique elements
 ```
 
-```{r}
-# Write your answer here
+```{r, solution = TRUE}
+length(unique(ds_dozen$dataset))
 ```
-
 
 - **tidyverse** version
 
@@ -89,7 +99,7 @@ The function **length()** returns the length of a vector, such as the unique ele
 # n_distinct counts the unique elements in a given vector.
 # we use summarise to return only the desired column named n here.
 # we use English verbs and no subsetting characters, nor we change dimensions (keep a tibble)
-# summarise(ds_dozen, n = n_distinct(dataset))
+summarise(ds_dozen, n = n_distinct(dataset))
 ```
 
 - even better, compute and display the number of lines per `dataset`
@@ -98,10 +108,9 @@ The function **length()** returns the length of a vector, such as the unique ele
 the function `count` in `dplyr` does the `group_by()` by the specified column + `summarise(n = n())` which returns the number of observation per defined group.
 ```
 
-```{r}
-# Write your answer here
+```{r, solution = TRUE}
+count(ds_dozen, dataset)
 ```
-
 
 
 ## Check summary statistics per dataset
@@ -112,36 +121,49 @@ the function `count` in `dplyr` does the `group_by()` by the specified column + 
 in `summarise()` you can define as many new columns as you wish. No need to call it for every single variable.
 ```
 
-```{r}
-# Write your answer here
+```{r, eval = FALSE, solution = TRUE}
+ds_dozen %>%
+  group_by(dataset) %>%
+  summarise(mean_x = mean(x),
+            mean_y = mean(y))
+```
+
+```{r, echo = FALSE, solution = TRUE}
+ds_dozen %>%
+  group_by(dataset) %>%
+  summarise(mean_x = mean(x),
+            mean_y = mean(y)) %>%
+  kable()
 ```
 
 
-```{r}
-# Write your answer here
+##### Compute both mean and standard deviation (sd) in one go using `across()`
+
+
+```{r, solution = TRUE}
+ds_dozen %>%
+  group_by(dataset) %>%
+  # across works with first on which columns and second on what to perform on selection
+  # 2 possibilities to select columns
+  # summarise(across(where(is.double), list(mean = mean, sd = sd)))
+  # by default in 1.0.5, grouped variables are excluded from across
+  # summarise(across(everything(), list(mean = mean, sd = sd)))
+  summarise(across(c(x, y), list(mean = mean, sd = sd)))
 ```
 
-
-
-##### Compute both mean and standard deviation (sd) in one go using `across()` {.bonus}
-
-
-```{r}
-# Write your answer here
+```{r, echo = FALSE, solution = TRUE}
+ds_dozen %>%
+  group_by(dataset) %>%
+  summarise(across(c(x, y), list(mean = mean, sd = sd))) %>%
+  kable()
 ```
-
-```{r}
-# Write your answer here
-```
-
 
 
 ##### What can you conclude?
 
-```{r}
-# Write your answer here
+```{block, solution = TRUE}
+all mean and sd are the same for the 13 datasets
 ```
-
 
 ## Plot the _datasauRus_
 
@@ -152,17 +174,20 @@ with the **geometry** `geom_point()`
 the `ggplot()` and `geom_point()` functions must be linked with a **+** sign
 ```
 
-```{r}
-# Write your answer here
+```{r, fig.height = 8, fig.asp = 1, solution = TRUE}
+ggplot(ds_dozen, aes(x = x, y = y)) +
+  geom_point()
 ```
-
 
 ##### Reuse the above command, and now colored by the `dataset` column
 
-```{r}
-# Write your answer here
+```{r, fig.height = 8, fig.asp = 1, solution = TRUE}
+ggplot(ds_dozen, 
+       aes(x = x, 
+           y = y, 
+           colour = dataset)) +
+  geom_point()
 ```
-
 
 Too many datasets are displayed.
 
@@ -172,10 +197,12 @@ Too many datasets are displayed.
 You can filter for one dataset upstream of plotting
 ```
 
-```{r}
-# Write your answer here
+```{r, solution = TRUE}
+ds_dozen %>%
+  filter(dataset == "away") %>%
+  ggplot(aes(x = x, y = y)) +
+  geom_point()
 ```
-
 
 ##### Adjust the **filtering** step to plot two datasets
 
@@ -183,83 +210,64 @@ You can filter for one dataset upstream of plotting
 R provides the inline instruction `%in%` to test if there a match in the left operand with the right one (a **vector** most probably)
 ```
 
-```{r}
-# Write your answer here
+```{r, solution = TRUE}
+ds_dozen %>%
+  filter(dataset %in% c("away", "dino")) %>%
+  # alternative without %in% and using OR (|)
+  #filter(dataset == "away" | dataset == "dino") %>%
+  ggplot(aes(x = x, y = y, colour = dataset)) +
+  geom_point()
 ```
-
 
 ##### Expand now by getting one `dataset` per **facet**
 
-```{r}
-# Write your answer here
+```{r, fig.height = 8, fig.asp = 1, solution = TRUE}
+ds_dozen %>%
+  filter(dataset %in% c("away", "dino")) %>%
+  ggplot(aes(x = x, y = y, colour = dataset)) +
+  geom_point() +
+  facet_wrap(~ dataset)
 ```
-
 
 ##### Remove the filtering step to facet all datasets
 
-```{r}
-# Write your answer here
+```{r, solution = TRUE}
+ds_dozen %>%
+  ggplot(aes(x = x, y = y, colour = dataset)) +
+  geom_point() +
+  facet_wrap(~ dataset, ncol = 3)
 ```
-
 
 
 ##### Tweak the theme and use the `theme_void` and remove the legend
 
-```{r}
-# Write your answer here
+```{r, fig.height = 8, fig.asp = 1, solution = TRUE}
+ggplot(ds_dozen, aes(x = x, y = y, colour = dataset)) +
+  geom_point() +
+  theme_void() +
+  theme(legend.position = "none") +
+  facet_wrap(~ dataset, ncol = 3)
 ```
-
 
 ##### Are the datasets actually that similar?
 
-```{r}
-# Write your answer here
+```{block, solution = TRUE}
+No ;) We were fooled by the summary stats
 ```
 
 
-##### Install `gganimate`, its dependencies will be automatically installed. {.bonus}
+## Animation
 
-```{block, opts.label = "tip"}
-the R package [`gifski`](https://cran.r-project.org/web/packages/gifski/index.html) could be installed on your machine, makes the GIF creation faster.
-`gifski` is internally written in `rust`, and this language needs `cargo` to run. See this [article](https://github.com/r-rust/hellorust#installation) to get it installed on your machine.
-First install `rust` before install the R package `gifski`.
-Please note, that the `animate()` step still takes ~ 3-5 minutes depending on your machine.
-```
-
-```{r}
-# Write your answer here
-```
+Plots can be animated, see for example what can be done with [`gganimate`](https://gganimate.com/).
+Instead of panels, **states** are made across `datasets` and **transitions** smoothed with an afterglow effect.
 
 
-##### Use the `dataset` variable to the `transition_states()` argument layer {.bonus}
-
-```{r}
-# Write your answer here
-```
-
-
-```{r}
-# Write your answer here
-```
-
-
-##### Visualize the tiny differences in means for both coordinates {.bonus}
-
-- need to zoom tremendously to see differences. Accumulate all states to better see the motions.
-
-```{r}
-# Write your answer here
-```
-
-
-```{r}
-# Write your answer here
-```
+![](https://i.imgur.com/51GcnEp.png)
 
 
 ## Conclusion
 
-> never trust summary statistics alone; always visualize your data | Alberto Cairo
+> Never trust summary statistics alone; always visualize your data | Alberto Cairo
 
 **Authors**
 

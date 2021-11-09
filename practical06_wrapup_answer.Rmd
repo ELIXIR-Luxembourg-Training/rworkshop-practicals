@@ -1,7 +1,7 @@
 ---
-title: "My answers"
+title: "Rworkshop wrapup practical"
 author: "My name"
-date: "2021-10-22"
+date: "2021-11-15"
 output: html_document
 ---
 
@@ -10,42 +10,140 @@ output: html_document
 
 >This practical connects most lectures and practicals covered in the course as they would work together for a typical data analysis with data import, transformation, summarizing and plotting.
 
-# Carbon dixoide plant intake
 
-The dataset is from the paper by **Potvin, C., Lechowicz, M. J. and Tardif, S.** (1990). The statistical analysis of ecophysiological response curves obtained from experiments involving repeated measures., _Ecology_, **71**, 1389–1400. You can find it at this [URL](https://biostat2.uni.lu/practicals/data/CO2.tsv)
+# Climate change
 
-## Load the data
+## Definition
 
-##### Load the [dataset](https://biostat2.uni.lu/practicals/data/CO2.tsv), assign the name `plant_CO2`
+First of all, we need to be clear on the difference between climate and weather. 
+
+##### Check online what is this difference and why **climate** has little to do with is the afternoon going to be sunny and/or windy.
+
+```{r}
+# Write your answer here
+```
+
+
+
+## Models
+
+After studying the past, scientists built models to estimate what will happen. More specifically, 
+what the temperatures will become in our century.
+We will look into the work by [Boucher et al. (2020)](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019MS002010), 
+**Presentation and Evaluation of the IPSL‐CM6A‐LR Climate Model** in _Journal of Advances in Modeling Earth Systems_. This work is mainly done at the Institut Pierre‐Simon Laplace Climate Modelling Centre ([IPSL-CMC](https://cmc.ipsl.fr/)), the **LR** means _Low Resolution_ which is in average 157 km of the Earth sectors.
+The atmosphere is separated in 79 layers (max is 80 km) and oceans in 79 layers (up to a depth of 100 m). The zooplankton, phytoplankton, and 15 classes of land plants, 11-layer of soil hydrology are modeled too.
+The necessary computer to perform such models is a cluster of 960 processors able to simulate 13-16 years per day.
+
+And I personally thanks to **Olivier Boucher** for kindly providing the raw data upon request.
+
+
+### Shared Socioeconomic Pathways
+
+The scenarios are named **Shared Socioeconomic Pathways** ([SSPs](https://en.wikipedia.org/wiki/Shared_Socioeconomic_Pathways)). Each estimates population growth, 
+composition of energy consumption and production.
+They are described as follows (full descriptions on [Wikipedia](https://en.wikipedia.org/wiki/Shared_Socioeconomic_Pathways)):
+
+- **SSP1**: Sustainability (Taking the Green Road), all nations going green and reducing inequality.
+- **SSP2**: Middle of the Road, only some nations are moving towards sustainability.
+- **SSP3**: Regional Rivalry (A Rocky Road), resurgence of nationalism, fragmentation of international order and focus on within borders security.
+- **SSP4**: Inequality (A Road divided), no cooperation, inequality with some investment in renewal energy.
+- **SSP5**: Fossil-fueled Development (Taking the Highway), "business as usual". 
+
+Note that I wrote "business as usual" for SSP5, but actually SSP3 is very similar. The difference in radiative forcing is useful to quantify the efforts for reducing CO<sub>2</sub> emissions.
+
+For each of the 5 scenarios, a [radiative forcing](https://en.wikipedia.org/wiki/Radiative_forcing) in W/m<sup>2</sup> is added.
+ The lower, the better as we had less CO<sub>2</sub> in the atmosphere. For more details, you can [read more here](https://www.carbonbrief.org/explainer-how-shared-socioeconomic-pathways-explore-future-climate-change)
+
+
+Of the note, the Sixth Assessment Report, Physical Science Basis ([AR6 group I](https://www.ipcc.ch/report/sixth-assessment-report-working-group-i/)) of the Intergovernmental Panel on Climate Change (IPCC) from August 2021 revise those scenarios and are discussed in the [Appendix](#appendix).
+
+
+
+The temperature supplied are in **global mean surface temperature** (GMST) in degrees Celsius relative to the period 1850-1899.
+Two CSV files are provided:
+
+- [`gmst_hist_ipsl.csv`](https://basv53.uni.lu/projects/data/Boucher_fig31/gmst_hist_ipsl.csv): contains the simulations historical years (1850-2014) 
+- [`gmst_sce_ipsl.csv`](https://basv53.uni.lu/projects/data/Boucher_fig31/gmst_sce_ipsl.csv): constains the simulated trends (2014-2100) for the different scenarios.
+
+##### Load for 2 files:
+
+- `gmst_hist_ipsl.csv`, keep the columns `YEAR` and the ones that start by `HIST`. Save as `ipsl_hist`
+- `gmst_sce_ipsl.csv`, keep the columns `YEAR` and the ones that contains the character `r`. Save as `ipsl_scenario`
+
+```{r}
+# Write your answer here
+```
+
+
+##### Are those files tidy? If not, why?
+
+```{r}
+# Write your answer here
+```
+
+
+
+##### Pivot both tibbles to the long format.
 
 ```{block, opts.label = "tip"}
-Pay attention to use meaningful names. 
-`plant_CO2_url` is a good name for the URL of this dataset.
-`plant_CO2_file` is appropriate for tsv file if you download it.
+The primary key is the column `YEAR` in both table.
+
+Then, using the same column names for both the names and values will make the next merge much easier.
+We recommend using the column name `model_r` for **names** and `anomalies` for **values**.
+
 ```
-
-
-
-
-```{r}
-# Write your answer here
-```
-
-## Explore the data
-
-##### How many rows and columns are present? And which data types are they?
 
 ```{r}
 # Write your answer here
 ```
 
 
-##### Three columns are categorical, taken together, how many observations have they?
+##### Bind both pivoted tables by the rows and assign the name `ipsl`.
+
+```{r}
+# Write your answer here
+```
+
+
+
+##### Is the data tidy?
+
+```{r}
+# Write your answer here
+```
+
+
+##### Tidy the the column `model_r` to put make model type and simulation number in their own columns. Assign the name `ipsl_tidy`
+
+```{r}
+# Write your answer here
+```
+
+
+##### Plot the simulations, temperature anomalies by year
+
+- One simulation has missing data, you can remove those values
+- Colored by model type
+- A line for the simulation number 1: `r1`
+- Add a dashed black line to materialize the +**2**°C
+- Optional: line with transparency for the simulation number > 1
+
+```{r}
+# Write your answer here
+```
+
+
+##### Looking at the graph, what do you think of the promises of keeping the global warming contained to +1.5°C? +2°C
+
+```{r}
+# Write your answer here
+```
+
+
+##### Zoom in the time frame 2010-2060, and temperature from 0 to +4°C
 
 ```{block, opts.label = "tip"}
-Using `count()` with the relevant columns is the easiest approach.
-Sorting by the highest number is often a nice way to discover the data.
-This option is available in `count()`
+you could use `coord_cartesian()` and `xlim` / `ylim`
 ```
 
 ```{r}
@@ -53,117 +151,39 @@ This option is available in `count()`
 ```
 
 
-```{r}
-# Write your answer here
-```
-
-
-##### How many categories for each of the character columns do you find?
-
-```{block, opts.label = "tip"}
-One option is to find the number of unique values using `n_distinct()`.
-This would have to be done three times, one for each character column. 
-Otherwise, `n_distinct()` can be applied to character columns using
-`across()` and relevant `where()` condition.
-```
-
-```{block, opts.label = "warning"}
-`n_distinct()`, `across()`  are functions that work **inside** `mutate()` or `summarise()`.
-```
+##### What can you say about the period 2020 - 2040, how different are the scenarios?
 
 ```{r}
 # Write your answer here
 ```
 
 
-##### Rename the columns to make them all lower case and continue with the resulting tibble for the next steps.
-
-```{r}
-# Write your answer here
-```
 
 
-## CO<sub>2</sub> data
+## Acknowledgements
 
-The numeric columns are defined as:
+- [Olivier Boucher](https://emc3.lmd.jussieu.fr/en/group-members/oboucher)
+- [Valérie Masson-Delmotte](https://www.lsce.ipsl.fr/Phocea/Pisp/index.php?nom=valerie.masson) and the [IPCC](https://www.ipcc.ch) 
+- [Jean-Marc Jancovici](https://fr.wikipedia.org/wiki/Jean-Marc_Jancovici)
+- [Matthieu Auzanneau](https://fr.wikipedia.org/wiki/Matthieu_Auzanneau)
 
-- `conc` is ambient carbon dioxide concentrations ($mL/L$).
-- `uptake` is carbon dioxide uptake rates ($umol/m^2$ sec).
+## Appendix {#appendix}
 
-##### Compute the mean of `conc` and `uptake` depending on the location (Quebec or Mississippi)
+### Revised scenarios in the Sixth Report AR6
 
-```{block, opts.label = "tip"}
-Ignore the treatment, chilled or / non chilled for now
-```
+The SSP were revised in the last report. IPCC dropped the SSP4 and revised the emissions of the SSP5. 
+Indeed, as the **conventional** oil **production** peaked around 2008 (https://fr.wikipedia.org/wiki/Or_noir,_la_grande_histoire_du_p%C3%A9trole, [Delannoy et al. 2021](https://www.sciencedirect.com/science/article/pii/S0306261921011673?via%3Dihub), Figure below) the low hanging cheap fruits are gone and it is unlikely that the production can increase, and so be burnt.
 
-```{r}
-# Write your answer here
-```
+See below the Figure SPM.4 panel a) from [AR6](https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_SPM_final.pdf)
+where the emissions will start declining after 2050 independently of any climate considerations. Useless to say, the troubles from such high temperatures (of note the Last Glacial Maximum 19,500 years ago was "only" 5-6°C colder) will probably make the needed huge investments and political stability hard for draining the last bit of underground oil.
+![](https://rworkshop.uni.lu/practicals/img/SSP_AR6_CO2.png)
 
+So the temperature increases for the max emission scenario is not going to hit the +7°C as in _Boucher et al. 2020_ but a median of 4.5°C with confidence intervals below 6°C ([Fig SPM.4 panel b](https://www.ipcc.ch/report/ar6/wg1/downloads/report/IPCC_AR6_WGI_SPM_final.pdf)).
 
-##### Does the CO<sub>2</sub> concentrations appear different in both locations?
+### Peak conventional oil
 
-```{r}
-# Write your answer here
-```
+- [Delannoy et al. 2021](https://www.sciencedirect.com/science/article/pii/S0306261921011673?via%3Dihub), in _Applied Energy_ 
 
+see the Field/Offshore Oil production in Figure 1:
 
-##### Compute the mean of `conc` and `uptake` depending on the plant location (`type` column), `plant` and treatment. Add the number of observations per group.
-
-```{block, opts.label = "tip"}
-the number of observations should be **7** everywhere as you saw before
-```
-
-```{r}
-# Write your answer here
-```
-
-
-##### From the summary above, sort the table to show the plant / location / treatment that uptake the most carbon dioxide
-
-```{block, opts.label = "tip"}
-a descending ordering is possible with `desc(mean_uptake)` in the `arrange()` function
-```
-
-
-```{r}
-# Write your answer here
-```
-
-
-It is hard to see if all plants have both treatment, you can pivot the table to find out. Right now the table after summarisation is in the **long** format. Pivoting means converting the table to the **wide format** using the treatment unique values (**chilled** and **nonchilled**) as new columns and filled with the values taken from the `mean_uptake` column.
-
-##### Pivot the table using `plant` and `type` as ids, names from `treatment` and values from the mean of carbon dioxide uptake
-
-```{block, opts.label = "tip"}
-look up the different arguments of the function `tidyr::pivot_wider()`
-```
-
-
-```{r}
-# Write your answer here
-```
-
-
-##### What do you conclude, does the same plant have been assessed for both treatment?
-
-```{r}
-# Write your answer here
-```
-
-
-## Visualize the location and CO<sub>2</sub> uptake
-
-Numbers are nice but plotting the data might better reveal how location and treatment relate.
-
-##### Plot the CO<sub>2</sub> uptake in function of plant location, using violin plots filled by treatment {.bonus}
-
-```{r}
-# Write your answer here
-```
-
-
-As a motivation, here is one version of the plot:
-
-
-
+![](https://ars.els-cdn.com/content/image/1-s2.0-S0306261921011673-ga1_lrg.jpg)

@@ -1,7 +1,7 @@
 ---
-title: "My answers"
+title: "Practical ggplot2"
 author: "My name"
-date: "2021-10-22"
+date: "2021-11-12"
 output: html_document
 ---
 
@@ -14,92 +14,12 @@ the grammar of graphics. In the last part, a supplementary exercise will focus o
 
 ##### Those kind of questions are optional {.bonus}
 
-# Categorical data
-
-We are going to use the built-in dataset called `ToothGrowth`. This dataset contains the teeth length of 60 guinea pigs which received 3 different doses of vitamin C (in mg/day), delivered either by orange juice (`OJ`) or ascorbic acid (`VC`). As for every (or near to every) function, most datasets shipped with a library contain also a useful help page (`?ToothGrowth`).
-
-##### Is this dataset tidy?
-
-```{r}
-# Write your answer here
-```
-
-
-##### Plot the distributions as boxplots of the teeth lengths by the `dose` type received
-
-```{block, opts.label = "tip"}
-- `dose` needs to be a categorical data. You can convert it with `factor()`
-- `geom_boxplot()` requires 2 aesthetics
-    + `x` must be **categorical / discrete** (see first item)
-    + `y` **must be continuous**
-```
-
-```{r}
-# Write your answer here
-```
-
-
-##### Attribute a filling colour to each delivery method (`supp` column)
-
-```{r}
-# Write your answer here
-```
-
-
-When the dataset is tidy, it is easy to draw a plot telling us the story: vitamin C affects the teeth growth and the delivery method is only important for lower concentrations.
-
-Boxplots are nice but misleading. The size of the dataset is not visible and the shapes of distributions could be better represented.
-
-`violins` allow a better view of the distribution shapes.
-
-##### Plot the distributions as violins of the teeth lengths by the `dose` type received
-
-```{block, opts.label = "tip"}
-- do **not** use the `supp` variable, we want only 3 violins, one for each dose.
-
-Set the option `trim = FALSE` to the `geom_violin()` to display distribution extremities
-```
-
-```{r}
-# Write your answer here
-```
-
-
-Now we are missing summary values like the medians which are shown on boxplots. We should add them.
-
-##### Add the median using the layer `geom_point(stat = "summary")` to the previous plot
-
-```{block,  opts.label = "tip"}
-Specify the `fun = "median"` and appropriate `size`, `colour` to get a big red dot representing the median
-
-You can use a trick to get a quick legend without using strings in aesthetics. 
-This will create a legend named with the string used. Concretely, `aes(colour = "median")`
-can be used, and specifying a manual red color with `scale_color_manual(values = "red")` will 
-enforce the red colour to the median dots.
-```
-
-```{r}
-# Write your answer here
-```
-
-
-Of note, a `ggplot` extension named `ggbeeswarm` proposes a very neat dotplot that fits the distribution.
-
-
-
-```{r}
-# Write your answer here
-```
 
 # Scatter plots of penguins
 
 The `penguins` dataset is provided by the `palmerpenguins` R package. As for every function, most data-sets shipped with a package contain also a useful help page (`?`).
 
 ##### If not done already, install the package `palmerpenguins` and load it.
-
-```{r}
-# Write your answer here
-```
 
 ```{r}
 # Write your answer here
@@ -178,6 +98,91 @@ Remember that:
 - `aes()` of individual geoms are specific (and overwrite the global definition if present).
 - `labs()` controls of plot annotations
 - `theme()` allows to tweak the plot like `theme(plot.caption = element_text(face = "italic"))` to render in italic the caption
+```
+
+# Categorical data
+
+We are going to use a dataset from the [TidyTuesday](https://github.com/rfordatascience/tidytuesday/) initiative. Several dataset about the theme **deforestation** on April 2021 were released, we will focus on the csv called `brazil_loss.csv`. The dataset columns are described in the linked [README](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-04-06/readme.md) and the csv is directly available at this [url](https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-04-06/brazil_loss.csv)
+
+
+##### Load the `brazil_loss.csv` file, remove the 2 first columns (`entity` and `code` since it is all Brazil) and assign the name `brazil_loss`
+
+```{block, opts.label = "tip"}
+Set the data type of `year` to `character()`
+```
+
+```{r}
+# Write your answer here
+```
+
+
+
+
+##### Is this dataset tidy?
+
+```{r}
+# Write your answer here
+```
+
+
+##### Pivot the deforestation reasons (columns `commercial_crops` to `small_scale_clearing`) to the long format. Values are areas in hectares (`area_ha` is a good column name). Save as `brazil_loss_long`
+
+```{r}
+# Write your answer here
+```
+
+
+
+##### Plot the deforestation areas per year, filled by the reasons for it as bars
+
+```{block, opts.label = "tip"}
+- `year` needs to be a categorical data. If you didn't read the data as character for this column, you can convert it with `factor()`
+- `geom_col()` requires 2 aesthetics
+    + `x` must be **categorical / discrete** (see first item)
+    + `y` **must be continuous**
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### Same as the plot above but bar filled by the reasons for deforestation
+
+```{r}
+# Write your answer here
+```
+
+
+Even if we have too many categories, we can appreciate the amount of `natural_disturbances` versus the reasons induced by humans.
+
+##### Lump the reasons for deforestations, keeping only the top 5 reasons, lumping as "Other" the rest
+
+```{block, opts.label = "tip"}
+- The function `fct_lump()` is very useful for this operation. Be careful to weight the categories with the appropriate continuous variable.
+- The legend of filled colours could be renamed and suppress if the title is explicit
+```
+
+```{r}
+# Write your answer here
+```
+
+
+
+##### Optimize the previous plot by sorting the 5 main deforestation reasons {.bonus}
+
+```{block, opts.label = "tip"}
+Unfortunately, `fct_infreq()` does not have a weight argument yet. 
+You need then to take care of this manually.
+
+One solution would be extract the top 5 main reasons using `dplyr` statements.
+
+Then use this vector to recode the `reasons` with the reason name when part of the top5 or `other` if not. Then `fct_reorder(reasons2, area_ha)` does the correct reordering. You might want to use
+`fct_rev()` to have the sorting from top to bottom in the legend.
+```
+
+```{r}
+# Write your answer here
 ```
 
 
@@ -295,7 +300,7 @@ Of note, `shape = 95` for dots is an hyphen shape.
 
 ##### Count the events per chromosome and per state  {.bonus}
 
-##### For _loss_ counts, set them to negative so the barplot will be display up / down. Save as `cnv_auto_chr`   {.bonus}
+##### For _loss_ counts, set them to negative so the barplot will be display up / down. Save as `cnv_auto_chr` {.bonus}
 
 ```{r}
 # Write your answer here
@@ -337,20 +342,9 @@ the function `fct_lump` from _forcats_ ease lumping. Just pick `n = 5` to get th
 ```
 
 
-```{r}
-# Write your answer here
-```
-
-
-
 ## Genomic plot of top 5 chromosomes
 
 ##### Plot the genomic localisations of CNV on the 5 main chromosomes {.bonus}
-
-
-```{r}
-# Write your answer here
-```
 
 
 ```{r}

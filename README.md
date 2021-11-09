@@ -37,3 +37,15 @@ Your tasks:
 - Save the file
 - Commit the changes
 - Push to the github classroom
+
+#### Other practicals
+
+Use the Rmarkdown templates in this repo by:
+
+- Edit the header accordingly with your name
+- Fill out the answer in the R chunks (default filled with a comment `# Write your answer here`)
+- Knit the Rmd to check if everything works well
+- If you use a new package (_i.e_ `palmerpenguis`), update the `renv.lock` with 
+    + `renv::snapshot()`, new package are discovered, say `y` to `[yN]`
+    + `Git` add the `renv.lock`, along with the completed Rmd
+    + `Git` push

@@ -1,47 +1,35 @@
 ---
 title: "My answers"
 author: "My name"
-date: "2021-10-22"
+date: "2021-11-11"
 output: html_document
 ---
 
 
 
-
-
-
-> In this practical, you'll learn how to import flat files using the `readr` package
-
-
-##### Those kind of questions are optional {.bonus}
+> In this practical, you'll practice to work in your project, import flat files using the `readr` package and add changes to your private course repository.
 
 # Before you start
 
-
-To perform reproducible research it is a good practice to store the files in a standardized location. For example, you could take advantage of the RStudio projects and store data files in a sub-folder called `data`.
-
-If you did not create an Rstudio project yet, **create a RStudio project** now.
+To perform reproducible research it is a good practice to store the files in a standardized location. We will take advantage of the RStudio projects and store data files in a sub-folder called `data`. This tutorial is meant to be completed as part of the repository that you use for all practicals of the R tidyverse workshop.
 
 ##### Prepare your project's folder
 
-1. Check that the project is active: the name you chose should appear on the top-right corner.
+1. Check that the project is active: the name you have chosen when setting up the project should appear on the top-right corner.
     
 2. Create a folder named `data` within your project's folder. Use the `Files` pane in the lower right Rstudio panel or your favorite file browser.
 
 3. Download the file [`blood_fat.csv`](https://biostat2.uni.lu/practicals/data/blood_fat.csv) and place it in the `data` sub-folder you just created.
 
+4. Add a `setup` code chunk to this Rmarkdown document and with those lines to load the libraries. You don't need to install the packages if those lines are working fine
 
-4. Create a new **Rmarkdown** file, save it at the project root with a relevant name.
-
-5. Add a code chunk and with those lines to load the libraries. You don't need to install the packages if those lines are working fine
 
 ~~~
 library(dplyr)
 library(readr)
 ~~~
 
-
-6. Don't forget to run the chunk's code to load the library during your interactive session
+5. Don't forget to run the chunk's code to load the library during your interactive session
 
 ```{block, opts.label = "warning"}
 If you load the library only in the console and forget to place a chunk to load it, the knitting process will fail. Indeed, when you click on the `knit` button, the chunks are evaluated in a new and fresh environment.
@@ -58,15 +46,15 @@ if you followed the preliminary steps above, download the csv in a sub-folder `d
 
 For example, you folder structure could be (depending on the picked names). Here:
 
-- RStudio project is `Rworkshop`
+- RStudio project is `rworkshop-practicals`
 - Rmarkdown document is `practical02_import.Rmd`
 
 ~~~
 .
 ├── data
 │   └── blood_fat.csv
-├── practical03_import.Rmd
-└── Rworkshop.Rproj
+├── practical02_import.Rmd
+└── rworkshop-practicals.Rproj
 ~~~
 
 ```
@@ -142,10 +130,13 @@ In the `col_types = c(....)` you can use the columns bare names and either the l
 # Write your answer here
 ```
 
+## Add the data and the changed Rmarkdown file to your Github repository
 
-##### One summarisation: compute the **mean** of both the `age` and `weight` per `group` {.bonus}
+You can use Git tab in RStudio or the command line as you prefer.
 
-```{r}
-# Write your answer here
-```
+1. Add the new files. For now it is OK to also include the data file.
+2. Commit the new and the changed file. Choose a commit message.
+3. Pull from the repository
+4. Push your changes to the repository.
 
+This is how all practicals in this workshop will be submitted. 

@@ -1,7 +1,8 @@
----
+--
+
 title: "My answers"
 author: "My name"
-date: "2021-10-22"
+date: "2021-11-11"
 output: html_document
 ---
 
@@ -12,7 +13,7 @@ output: html_document
 
 
 
-## Strings and escape sequences  in `r fontawesome::fa(name = "r-project", fill = "steelblue")`
+## Strings and escape sequences  in R
 
 ##### Write a sentence with escape sequences.
 Try the sentence: `"It's the end of the world!" he said.\` . 
@@ -36,7 +37,7 @@ length(words)
 ##### Select words that
 
 1. Contain a `y`
-```{r}
+`{r}
 # Write your answer here
 ```
 
@@ -75,7 +76,6 @@ You can use `head(words, 10)` as a convenient way to access the elements of the 
 
 
 ## Viral research 
-
 Read the genome sequence of the Hepatitis D virus: [hepd.fasta](https://biostat2.uni.lu/practicals/data/hepd.fasta).
 For now, just execute the following:
 
@@ -83,7 +83,7 @@ For now, just execute the following:
 hepd <- readr::read_lines("https://biostat2.uni.lu/practicals/data/hepd.fasta")
 ```
 
-##### What is the length of the genome sequence? `r fontawesome::fa("ruler")`
+##### What is the length of the genome sequence?
 
 ```{r}
 # Write your answer here

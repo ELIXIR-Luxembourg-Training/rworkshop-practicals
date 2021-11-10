@@ -75,10 +75,10 @@ Divide all entries in the REI questionnaire by 5, the maximal value.
 ```
 
 
-#### Sort by groups
+##### Find the number of subjects by age, gender and condition
 
-Find the number of subjects by age, gender and condition, e.g. how many 20 years of age females are in the `stress` group. 
-Sort the resulting tibble such that the condition that contains the most populous group is sorted first (i.e. `stress` or `control` appear together). 
+The table should include how many 20 years of age females are in the `stress` group. 
+Sort the resulting tibble such that the condition that contains the most populous group is sorted first. 
 
 ```{r}
 # Write your answer here

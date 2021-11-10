@@ -6,6 +6,9 @@ output: html_document
 ---
 
 
+```{r setup, include = FALSE}
+library(tidyverse)
+```
 
 
 ### Judgment
@@ -58,7 +61,7 @@ Divide all entries in the REI questionnaire by 5, the maximal value.
 ```
 
 
-##### Find the moral dilemma with the highest average score across all participants.
+##### Find the moral dilemma with the highest average score across all participants.{.bonus}
   
 The result should be a tibble containing the dilemma and the average such that the dilemma with the highest average in the first row. 
 
@@ -70,7 +73,12 @@ The result should be a tibble containing the dilemma and the average such that t
 ### Genetic variants
 
 ##### Clean the table of genetic *variants* such that all variants appear as a column labeled by their position. 
-The format in the input is the reference allele, the position and the variant, commonly called alternative allele. In `T6G`, `T` is the reference allele, `6` is the position (along the gene) and `G` is the variant allele. 
+The format in the `var` columns is the 
+  * reference allele (one of the DNA "letters" `A`, `C`, `G` or `T`), 
+  * the position along this particular gene 
+  * and the variant allele. 
+  
+E.g. in `T6G`, `T` is the reference allele, `6` is the position (along the gene) and `G` is the variant allele. 
 ```{r}
 variants <- tribble(
   ~sampleid, ~var1, ~var2, ~var3,
@@ -82,9 +90,12 @@ variants <- tribble(
 
 ```
 
-The table should look something like this.
+Your result should look something like the following table.
 
-
+sampleid | 3| 5| 6
+:--------|-:|-:|-:
+S1       | T| G| G
+S2       | G| G| `NA`
 
 ```{r}
 # Write your answer here
@@ -93,7 +104,7 @@ The table should look something like this.
 
 #### Select relevant variants
 
-Genetic variants are labeled acording to their effect on stability of the gene product.  
+Genetic variants are labeled according to their effect on stability of the gene product.  
 
 ##### Select the subjects in table *variants* that carry variants labeled as *damaging*. 
 The final output should be vector of sample ids.

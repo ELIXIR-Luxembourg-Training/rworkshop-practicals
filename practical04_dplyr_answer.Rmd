@@ -62,21 +62,29 @@ Divide all entries in the REI questionnaire by 5, the maximal value.
 # Write your answer here
 ```
 
+##### Find the moral dilemma with the highest average score across all participants. 
+  
+```{r}
+# Write your answer here
+```
+
+##### Find the moral dilemma with the highest average score across all participants and also compute the median.
+  
+```{r}
+# Write your answer here
+```
+
+
 #### Sort by groups
 
 Find the number of subjects by age, gender and condition, e.g. how many 20 years of age females are in the `stress` group. 
 Sort the resulting tibble such that the condition that contains the most populous group is sorted first (i.e. `stress` or `control` appear together). 
 
-## Part two 
-
-##### Find the moral dilemma with the highest average score across all participants.{.bonus}
-  
-Use the judgements data from Part one. The result should be a tibble containing the dilemma and the average such that the dilemma with the highest average in the first row. 
-
 ```{r}
 # Write your answer here
 ```
 
+## Part two 
 
 ### Genetic variants
 

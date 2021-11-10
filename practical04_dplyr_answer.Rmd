@@ -11,8 +11,10 @@ library(tidyverse)
 ```
 
 
-### Judgment
-This short tutorial will allow you to explore `dplyr` functionality based on the previous lecture. Every question can be answered with a combination of `%>%` pipes. You should refrain from using temporary variables and statements outside of the range of the tidyverse.  
+### Judgment - part one
+This short tutorial will allow you to explore `dplyr` functionality based on the previous lecture. Every question can be answered with a combination of `%>%` pipes. You should refrain from using temporary variables and statements outside of the range of the tidyverse. 
+
+The first part does not require joins or pivots.
 
 ##### Import the [data from the website](  https://biostat2.uni.lu/practicals/data/judgments.tsv). 
 Assign to the name `judgments`
@@ -60,10 +62,16 @@ Divide all entries in the REI questionnaire by 5, the maximal value.
 # Write your answer here
 ```
 
+#### Sort by groups
+
+Find the number of subjects by age, gender and condition, e.g. how many 20 years of age females are in the `stress` group. 
+Sort the resulting tibble such that the condition that contains the most populous group is sorted first (i.e. `stress` or `control` appear together). 
+
+## Part two 
 
 ##### Find the moral dilemma with the highest average score across all participants.{.bonus}
   
-The result should be a tibble containing the dilemma and the average such that the dilemma with the highest average in the first row. 
+Use the judgements data from Part one. The result should be a tibble containing the dilemma and the average such that the dilemma with the highest average in the first row. 
 
 ```{r}
 # Write your answer here

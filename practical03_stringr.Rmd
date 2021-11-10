@@ -1,5 +1,4 @@
---
-
+---
 title: "My answers"
 author: "My name"
 date: "2021-11-11"
@@ -30,6 +29,7 @@ We will be using the `words` data that is built into `stringr`.
 The data set is availble to you if you load the package.
 
 ```{r}
+library(stringr)
 length(words)
 ```
 

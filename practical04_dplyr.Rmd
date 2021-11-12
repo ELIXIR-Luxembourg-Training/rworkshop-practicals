@@ -16,7 +16,7 @@ This short tutorial will allow you to explore `dplyr` functionality based on the
 
 The first part does not require joins or pivots.
 
-##### Import the [data from the website](  https://biostat2.uni.lu/practicals/data/judgments.tsv). 
+##### Import the [data from the website](https://biostat2.uni.lu/practicals/data/judgments.tsv). 
 Assign to the name `judgments`
 
 ```{r}
@@ -64,6 +64,8 @@ Divide all entries in the REI questionnaire by 5, the maximal value.
 
 ##### Find the moral dilemma with the highest average score across all participants. 
   
+The result should be a tibble containing the dilemma and the average such that the dilemma with the highest average in the first row. 
+
 ```{r}
 # Write your answer here
 ```

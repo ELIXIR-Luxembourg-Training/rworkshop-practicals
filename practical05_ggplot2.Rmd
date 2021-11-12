@@ -133,7 +133,7 @@ Set the data type of `year` to `character()`
 
 
 
-##### Plot the deforestation areas per year, filled by the reasons for it as bars
+##### Plot the deforestation areas per year as bars
 
 ```{block, opts.label = "tip"}
 - `year` needs to be a categorical data. If you didn't read the data as character for this column, you can convert it with `factor()`

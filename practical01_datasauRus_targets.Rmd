@@ -1,0 +1,321 @@
+---
+title: "Datasaurus with targets"
+author: "Aurelien Ginolhac"
+date: '2021-11-16'
+output: html_document
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(targets)
+# to ensure we don't bundle previous targets, start from scratch
+# but not the targets meta folders, only the definitions
+#tar_unscript()
+```
+
+By default each **target** is run inside a fresh R session (using `callr`) and thus no packages are loaded.
+You can specify them for each or use a global 
+```{targets globals, tar_globals = TRUE}
+tar_option_set(packages = "tidyverse")
+# Definition of function goes here
+ggds <- function(.data) {
+  ggplot(.data, aes(x = x, y = y))
+}
+```
+
+This guided practical will demonstrate that the **tidyverse** allows to compute summary statistics and visualize datasets efficiently.
+This dataset is already stored in a **tidy** `tibble`, cleaning steps will come in future practicals.
+
+## `datasauRus` package
+
+Fake TSV file, created with this code:
+
+```{r, eval = FALSE}
+readr::write_tsv(datasauRus::datasaurus_dozen, "data/datasaurus.tsv")
+```
+
+
+**targets** has its own machinery that `knitr` ([>= v1.34](https://github.com/yihui/knitr/releases/tag/v1.34)) now recognizes the `targets` keyword.
+
+`tar_interactive` populates the **Global Env** if set to `TRUE`.
+
+If executed, or during the knitting process, the `_targets_r` folder is created/updated with R script corresponding to the chunk name. Here `_targets_r/data.R` will contain the code in the chunk.
+
+```{targets data, tar_interactive = FALSE}
+tar_target(ds_file, "data/datasaurus.tsv", format = "file")
+```
+
+Now, a new script `_targets_r/read_data.R` is created. Both will be read by the main `_targets.R` that **Targets markdown** creates if absent.
+
+```{targets read_data, tar_interactive = FALSE}
+tar_target(ds, read_tsv(ds_file, show_col_types = FALSE), packages = "readr")
+```
+
+`tar_simple` sets to `TRUE` allows to create a **targets** with the chunk name.
+
+```{targets first_plot, tar_simple = TRUE, tar_interactive = FALSE}
+ggds(ds) +
+  geom_point()
+```
+
+##### Reuse the above command, and now colored by the `dataset` column
+
+```{targets second_plot, tar_simple = TRUE}
+ggds(ds) + 
+  aes(colour = dataset) +
+  geom_point()
+```
+
+Rest of the plotting targets are written altogether. And are bundled using `list()`
+
+```{targets plotting}
+list(
+  tar_target(dino, ds |> 
+               filter(dataset == "dino") |>
+               ggds() +
+               geom_point()),
+  tar_target(dino_away, ds |> 
+               filter(dataset %in% c("away", "dino")) |>
+               ggds() +
+               aes(colour = dataset) +
+               geom_point()),
+    tar_target(dino_away_facet, ds |> 
+               filter(dataset %in% c("away", "dino")) |>
+               ggds() +
+               geom_point() +
+               facet_wrap(~ dataset)),
+  tar_target(all_facets,
+             ds |> 
+               ggplot(aes(x = x, y = y, colour = dataset)) +
+               geom_point() +
+               facet_wrap(~ dataset, ncol = 3)),
+  tar_target(all_facets_void,
+             ggplot(ds, aes(x = x, y = y, colour = dataset)) +
+               geom_point() +
+               theme_void() +
+               theme(legend.position = "none") +
+               facet_wrap(~ dataset, ncol = 3))
+)
+```
+
+
+
+```{r}
+tar_make()
+```
+
+
+```{r}
+tar_visnetwork()
+```
+
+
+## Explore the dataset
+
+
+only the first **10** rows are displayed.
+
+```{r, echo = FALSE}
+tar_read(ds) 
+```
+
+##### What are the dimensions of this dataset? Rows and columns?
+
+- **base** version, using either `dim()`, `ncol()` and `nrow()`
+
+```{r, solution = TRUE}
+# dim() returns the dimensions of the data frame, i.e number of rows and columns
+dim(tar_read(ds))
+# ncol() only number of columns
+ncol(tar_read(ds))
+# nrow() only number of rows
+nrow(tar_read(ds))
+```
+
+- **tidyverse** version
+
+```{block, solution = TRUE}
+nothing to be done, a `tibble` display its dimensions, starting by a comment ('#' character)
+```
+
+##### Assign the `tar_read(ds)` to the `ds_dozen` name. This aims at populating the **Global Environment**
+
+```{r}
+ds_dozen <- tar_read(ds)
+```
+
+
+`tar_load()` will read the target object and name it with its name, populating the **Global Env**
+
+```{r}
+tar_load(ds)
+```
+
+
+##### Using Rstudio, those dimensions are now also reported within the interface, where?
+
+```{block, solution = TRUE}
+in the Environment panel -> Global Environment
+```
+
+## How many datasets are present?
+
+- **base** version
+
+```{block, opts.label = "tip"}
+You want to count the number of **unique** elements in the column **dataset**. The character `$` applied to a data.frame subset the column and convert the 2D structure to 1D, _i. e_ a vector.
+The function **length()** returns the length of a vector, such as the unique elements
+```
+
+```{r, solution = TRUE}
+length(unique(ds_dozen$dataset))
+```
+
+- **tidyverse** version
+
+```{r}
+# n_distinct counts the unique elements in a given vector.
+# we use summarise to return only the desired column named n here.
+# we use English verbs and no subsetting characters, nor we change dimensions (keep a tibble)
+summarise(ds_dozen, n = n_distinct(dataset))
+```
+
+- even better, compute and display the number of lines per `dataset`
+
+```{block, opts.label = "tip"}
+the function `count` in `dplyr` does the `group_by()` by the specified column + `summarise(n = n())` which returns the number of observation per defined group.
+```
+
+```{r, solution = TRUE}
+count(ds_dozen, dataset)
+```
+
+
+## Check summary statistics per dataset
+
+##### Compute the mean of the `x` & `y` column. For this, you need to `group_by()` the appropriate column and then `summarise()`
+
+```{block, opts.label = "tip"}
+in `summarise()` you can define as many new columns as you wish. No need to call it for every single variable.
+```
+
+
+```{r, echo = FALSE, solution = TRUE}
+ds_dozen %>%
+  group_by(dataset) %>%
+  summarise(mean_x = mean(x),
+            mean_y = mean(y)) 
+```
+
+
+##### Compute both mean and standard deviation (sd) in one go using `across()`
+
+
+```{r, solution = TRUE}
+ds_dozen %>%
+  group_by(dataset) %>%
+  # across works with first on which columns and second on what to perform on selection
+  # 2 possibilities to select columns
+  # summarise(across(where(is.double), list(mean = mean, sd = sd)))
+  # by default in 1.0.5, grouped variables are excluded from across
+  # summarise(across(everything(), list(mean = mean, sd = sd)))
+  summarise(across(c(x, y), list(mean = mean, sd = sd)))
+```
+
+
+##### What can you conclude?
+
+```{block, solution = TRUE}
+all mean and sd are the same for the 13 datasets
+```
+
+## Plot the _datasauRus_
+
+##### Plot the `ds_dozen` with `ggplot` such the **aesthetics** are `aes(x = x, y = y)` 
+with the **geometry** `geom_point()`
+
+```{block, opts.label = "tip"}
+the `ggplot()` and `geom_point()` functions must be linked with a **+** sign
+```
+
+```{r, fig.height = 8, fig.asp = 1, solution = TRUE}
+tar_read(first_plot)
+```
+
+##### Reuse the above command, and now colored by the `dataset` column
+
+```{r, fig.height = 8, fig.asp = 1, solution = TRUE}
+tar_read(second_plot)
+```
+
+Too many datasets are displayed.
+
+##### How can we plot only one at a time?
+
+```{block, opts.label = "tip"}
+You can filter for one dataset upstream of plotting
+```
+
+```{r, solution = TRUE}
+tar_read(dino)
+```
+
+##### Adjust the **filtering** step to plot two datasets
+
+```{block, opts.label = "tip"}
+R provides the inline instruction `%in%` to test if there a match in the left operand with the right one (a **vector** most probably)
+```
+
+```{r, solution = TRUE}
+tar_read(dino_away)
+```
+
+##### Expand now by getting one `dataset` per **facet**
+
+```{r, fig.height = 8, fig.asp = 1, solution = TRUE}
+tar_read(dino_away_facet)
+```
+
+##### Remove the filtering step to facet all datasets
+
+```{r, solution = TRUE}
+tar_read(all_facets)
+```
+
+
+##### Tweak the theme and use the `theme_void` and remove the legend
+
+```{r, fig.height = 8, fig.asp = 1, solution = TRUE}
+tar_read(all_facets_void)
+```
+
+##### Are the datasets actually that similar?
+
+```{block, solution = TRUE}
+No ;) We were fooled by the summary stats
+```
+
+
+## Animation
+
+Plots can be animated, see for example what can be done with [`gganimate`](https://gganimate.com/).
+Instead of panels, **states** are made across `datasets` and **transitions** smoothed with an afterglow effect.
+
+
+![](https://i.imgur.com/51GcnEp.png)
+
+
+## Conclusion
+
+> Never trust summary statistics alone; always visualize your data | Alberto Cairo
+
+**Authors**
+
+- Alberto Cairo, (creator)
+- Justin Matejka
+- George Fitzmaurice
+- Lucy McGowan
+
+from this [post](https://itsalocke.com/datasaurus-now-cran/)

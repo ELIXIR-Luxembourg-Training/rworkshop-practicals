@@ -12,9 +12,6 @@ output: html_document
 
 > In this practical, you'll learn how to import flat files using the `readr` package
 
-
-##### Those kind of questions are optional {.bonus}
-
 # Before you start
 
 

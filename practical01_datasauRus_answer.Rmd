@@ -11,7 +11,6 @@ output: html_document
 This guided practical will demonstrate that the **tidyverse** allows to compute summary statistics and visualize datasets efficiently.
 This dataset is already stored in a **tidy** `tibble`, cleaning steps will come in future practicals.
 
-
 ##### Those kind of questions are optional {.bonus}
 
 ## `datasauRus` package

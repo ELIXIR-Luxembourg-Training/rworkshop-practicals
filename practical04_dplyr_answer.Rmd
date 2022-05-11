@@ -82,7 +82,7 @@ Sort the resulting tibble such that the condition that contains the most populou
 
 ##### Find the moral dilemma with the highest average score across all participants.
 
-The result should be a tibble containing the dilemma and the average such that the dilemma with the highest average in the first row. 
+The result must be a tibble containing the dilemma and the average such that the dilemma with the highest average in the first row. 
 
 ```{r}
 # Write your answer here

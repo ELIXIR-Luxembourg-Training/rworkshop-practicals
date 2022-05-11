@@ -1,0 +1,239 @@
+---
+title: "My answers"
+author: "My name"
+date: "2022-05-11"
+output: html_document
+---
+
+
+
+
+This guided practical will demonstrate that the **tidyverse** allows to compute summary statistics and visualize datasets efficiently.
+This dataset is already stored in a **tidy** `tibble`, cleaning steps will come in future practicals.
+
+
+##### Those kind of questions are optional {.bonus}
+
+## `datasauRus` package
+
+- check if you have the package `datasauRus` installed
+
+```{r}
+library(datasauRus)
+```
+
+- should return nothing. If `there is no package called ‘datasauRus’` appears, it means that the package needs 
+to be installed. Use this:
+
+
+## Explore the dataset
+
+Since we are dealing with a `tibble`, we can type
+
+
+
+only the first **10** rows are displayed.
+
+
+##### What are the dimensions of this dataset? Rows and columns?
+
+- **base** version, using either `dim()`, `ncol()` and `nrow()`
+
+```{r}
+# Write your answer here
+```
+
+
+- **tidyverse** version
+
+```{r}
+# Write your answer here
+```
+
+
+##### Assign the `datasaurus_dozen` to the `ds_dozen` name. This aims at populating the **Global Environment**
+
+```{r}
+# Write your answer here
+```
+
+
+##### Using Rstudio, those dimensions are now also reported within the interface, where?
+
+```{r}
+# Write your answer here
+```
+
+
+## How many datasets are present?
+
+- **base** version
+
+```{block, opts.label = "tip"}
+You want to count the number of **unique** elements in the column **dataset**. The character `$` applied to a data.frame subset the column and convert the 2D structure to 1D, _i. e_ a vector.
+The function **length()** returns the length of a vector, such as the unique elements
+```
+
+```{r}
+# Write your answer here
+```
+
+
+- **tidyverse** version
+
+```{r}
+# n_distinct counts the unique elements in a given vector.
+# we use summarise to return only the desired column named n here.
+# we use English verbs and no subsetting characters, nor we change dimensions (keep a tibble)
+summarise(ds_dozen, n = n_distinct(dataset))
+```
+
+- even better, compute and display the number of lines per `dataset`
+
+```{block, opts.label = "tip"}
+the function `count` in `dplyr` does the `group_by()` by the specified column + `summarise(n = n())` which returns the number of observation per defined group.
+```
+
+```{r}
+# Write your answer here
+```
+
+
+
+## Check summary statistics per dataset
+
+##### Compute the mean of the `x` & `y` column. For this, you need to `group_by()` the appropriate column and then `summarise()`
+
+```{block, opts.label = "tip"}
+in `summarise()` you can define as many new columns as you wish. No need to call it for every single variable.
+```
+
+```{r}
+# Write your answer here
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+
+##### Compute both mean and standard deviation (sd) in one go using `across()` {.bonus}
+
+
+```{r}
+# Write your answer here
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+
+##### What can you conclude?
+
+```{r}
+# Write your answer here
+```
+
+
+## Plot the _datasauRus_
+
+##### Plot the `ds_dozen` with `ggplot` such the **aesthetics** are `aes(x = x, y = y)` 
+with the **geometry** `geom_point()`
+
+```{block, opts.label = "tip"}
+the `ggplot()` and `geom_point()` functions must be linked with a **+** sign
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### Reuse the above command, and now colored by the `dataset` column
+
+```{r}
+# Write your answer here
+```
+
+
+Too many datasets are displayed.
+
+##### How can we plot only one at a time?
+
+```{block, opts.label = "tip"}
+You can filter for one dataset upstream of plotting
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### Adjust the **filtering** step to plot two datasets
+
+```{block, opts.label = "tip"}
+R provides the inline instruction `%in%` to test if there a match in the left operand with the right one (a **vector** most probably)
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### Expand now by getting one `dataset` per **facet**
+
+```{r}
+# Write your answer here
+```
+
+
+##### Remove the filtering step to facet all datasets
+
+```{r}
+# Write your answer here
+```
+
+
+
+##### Tweak the theme and use the `theme_void` and remove the legend
+
+```{r}
+# Write your answer here
+```
+
+
+##### Are the datasets actually that similar?
+
+```{r}
+# Write your answer here
+```
+
+
+
+## Animation
+
+Plots can be animated, see for example what can be done with [`gganimate`](https://gganimate.com/).
+Instead of panels, **states** are made across `datasets` and **transitions** smoothed with an afterglow effect.
+
+```{r}
+# Write your answer here
+```
+
+
+## Conclusion
+
+> Never trust summary statistics alone; always visualize your data | Alberto Cairo
+
+**Authors**
+
+- Alberto Cairo, (creator)
+- Justin Matejka
+- George Fitzmaurice
+- Lucy McGowan
+
+from this [post](https://itsalocke.com/datasaurus-now-cran/)

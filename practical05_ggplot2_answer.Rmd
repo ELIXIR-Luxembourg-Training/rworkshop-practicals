@@ -277,7 +277,7 @@ See the `fct_collapse()` function in the **forcats**
 ```
 
 
-##### plot the genomic segments length per state
+##### Plot the genomic segments length per state {.bonus}
 
 ```{block,  opts.label = "tip"}
 - The distributions are completely skewed: transform to log-scale to get a decent plot.

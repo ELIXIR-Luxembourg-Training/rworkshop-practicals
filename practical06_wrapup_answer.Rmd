@@ -1,0 +1,211 @@
+---
+title: "My answers"
+author: "My name"
+date: "2022-05-11"
+output: html_document
+---
+
+
+
+
+>This practical connects most lectures and practicals covered in the course as they would work together for a typical data analysis with data import, transformation, summarizing and plotting.
+
+
+## Atmospheric carbon dioxide
+
+
+Carbon dioxide, CO<sub>2</sub> is as its name says, an oxide. Meaning, once in the atmosphere is it extremely stable
+and will remain there for thousands of years. Two main carbon sinks exist: forest, mainly trees that incorporate the carbon
+ for their growth and oceans. The latter have absorbed approximately half of what humans have produce by burning oil,
+ not without consequences. Oceans are getting warmer, making CO<sub>2</sub> solubility weaker and diminishes the pH.
+ This acidification already killed half of the animals building coral reef ([91% as in 2022](https://www.theguardian.com/environment/2022/may/10/devastating-90-of-reefs-surveyed-on-great-barrier-reef-affected-by-coral-bleaching-in-2022)) and calcifying organisms.
+ CO<sub>2</sub>, like methane is a greenhouse gas, absorbing and radiating infrared thermal energy 
+ leading to heat being trapped close to the ground. 
+It is worth saying that the first scientist to discover the link between CO<sub>2</sub> and heat trap was a woman [**Eunice Newton Foote**](https://en.wikipedia.org/wiki/Eunice_Newton_Foote) as early as 1856. [French version](https://fr.wikipedia.org/wiki/Eunice_Newton_Foote) of the Wikipedia page is more in line with the [Smithsonian article](https://www.smithsonianmag.com/science-nature/lady-scientist-helped-revolutionize-climate-science-didnt-get-credit-180961291/): she was not allowed to present her work because of her gender.
+
+
+
+##### Find out how long carbon dioxide can last in our atmosphere and why it matters to look at **cumulative** emissions
+
+
+## Cumulative carbon dioxide emissions
+
+Due to extreme long time CO<sub>2</sub> remains in the atmosphere, looking at yearly emissions is of little interest.
+Especially since this is used by rich countries who got rid of most of their industry to justify little efforts.
+What matters is the **cumulative** emissions. For this, we will look at the data from the [World Bank](https://data.worldbank.org/indicator/EN.ATM.CO2E.PC).
+You will download this data as a ZIP archive (`API_EN.ATM.CO2E.PC_DS2_en_csv_v2_3731558.zip`) that contains 3 CSV.
+
+
+##### Read the CSV `API_EN.ATM.CO2E.PC_DS2_en_csv_v2_3731558.csv`, assign the name `cum_co2`
+
+```{block, opts.label = "tip"}
+- If you look at the file, the first 4 lines are not of interest and should be skipped.
+- Column names will be having spaces, leading digits etc... Using `name_repair = "unique"` would help.
+- Columns then named `"Country code":"Indicator Code"` can be discarded.
+```
+
+```{r}
+# Write your answer here
+```
+
+
+##### This dataset is not tidy, why?
+
+```{r}
+# Write your answer here
+```
+
+
+##### Pivot accordingly and assign `cum_co2_long`
+
+```{block, opts.label = "tip"}
+- Pivot all columns but the identifier of interest: `country_name`
+- The `names_to` would make sense to be equal to `year`.
+- Transform the names column to integers
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+##### Cleanup by removing the missing values and the year `66`
+
+```{block, opts.label = "tip"}
+The first year is 1960, a coherent filtering on the `year` column.
+For removing missing values of CO2, `drop_na()` is a good pick
+```
+
+```{r}
+# Write your answer here
+```
+
+
+
+##### Plotting Worldwide yearly emissions
+
+```{block, opts.label = "tip"}
+- Summarise per year the emissions to have them worldwide.
+- Compute the cumulative sum (checkout the `cumsum()` function) of emissions.
+- Plot this cumulative sum.
+- Add vertical lines for the year 1973, 1979 and 2008. 3 major crisis and comment.
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+
+```{r}
+# Write your answer here
+```
+
+
+
+##### Using the website [Our World in Data](https://ourworldindata.org/economic-growth) load in R their dataset on [economic growth](https://ourworldindata.org/grapher/world-gdp-over-the-last-two-millennia?time=1900..2015) as a CSV the World GDP over the last millennia
+
+**GDP** is the main economic indicator and the only target for most countries since WWII.
+And this despite a poor indicator (accidents, disasters increase GDP) it is the target.
+
+```{r}
+# Write your answer here
+```
+
+
+##### Join `cum_co2_long` and the World GDP per year. Plot this relationship and comment
+
+
+```{r}
+# Write your answer here
+```
+
+
+
+##### Find the year on which we emitted 50% of all human caused carbon dioxide.
+
+```{r}
+# Write your answer here
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+However, one can argue that the emissions data start only in  1960 and are in per-capita units.
+
+Let's explore with another dataset from the famous [Our World in Data](https://ourworldindata.org/) organisation
+
+##### Download and open the [CSV CO2 file](https://nyc3.digitaloceanspaces.com/owid-public/data/co2/owid-co2-data.csv), assign name owid_co2
+
+```{block, opts.label = "tip"}
+This file comes already in a data format you can use straight away.
+But there are missing values in columns, so pay attention to use the argument `na.rm = TRUE` in your sums.
+```
+
+```{r}
+owid_co2 <- read_csv("https://r-training.pages.uni.lu/biostat1/projects/data/owid-co2-data.csv",
+                     show_col_types = FALSE)
+```
+
+##### Using the `co2` column, sum up per year the cumulative emission of carbon dioxide and find out when 50% of emissions were produced
+
+```{block, opts.label = "tip"}
+Select directly the "World" as `country` and the cumulative CO2 are also already computed in `cumulative_co2`
+```
+
+```{r}
+# Write your answer here
+```
+
+
+
+
+```{r}
+# Write your answer here
+```
+
+
+##### Display the top 10 Carbon dioxide **countries** emitters of all time and comment
+
+```{block, opts.label = "tip"}
+The Our World in Data added the calculations for continents and world inside `country`.
+to select only individual countries, select only `iso_code` that are **3** characters long.
+```
+
+```{r}
+owid_co2 |> 
+  filter(str_length(iso_code) == 3L) |>
+  group_by(country) |> 
+  summarise(co2_sum = sum(co2, na.rm = TRUE)) |> 
+  slice_max(co2_sum, n = 10) |> 
+  mutate(rank = row_number(), .before = 1L)
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+
+
+## Acknowledgements
+
+- [Valérie Masson-Delmotte](https://www.lsce.ipsl.fr/Phocea/Pisp/index.php?nom=valerie.masson) and the [IPCC](https://www.ipcc.ch) 
+- [Jean-Marc Jancovici](https://fr.wikipedia.org/wiki/Jean-Marc_Jancovici)
+- [Matthieu Auzanneau](https://fr.wikipedia.org/wiki/Matthieu_Auzanneau)
+
+## Appendix {#appendix}
+
+There is too much of fossil energy left to make our climate livable. 
+The carbon dioxide concentration has never been that high as today since 800,000 years.
+Thus, all the humankind history has lived in lower concentrations, the new era is then an unknown territory.
+However, as seen in [Delannoy et al. 2021](https://www.sciencedirect.com/science/article/pii/S0306261921011673?via%3Dihub), in _Applied Energy_ 
+ there is not enough fossil for continuing our current life style, and for lower income countries to reach it. 
+
+![](https://ars.els-cdn.com/content/image/1-s2.0-S0306261921011673-ga1_lrg.jpg)

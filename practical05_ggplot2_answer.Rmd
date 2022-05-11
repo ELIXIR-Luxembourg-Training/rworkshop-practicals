@@ -10,7 +10,7 @@ output: html_document
 
 
 > This practical aims at performing exploratory plots and how-to build layer by layer to be familiar with
-the grammar of graphics. In the last part, a supplementary exercise will focus on plotting genome-wide CNV. 
+the grammar of graphics. In the last part, an optional exercise will focus on plotting genome-wide CNV. 
 
 ##### Those kind of questions are optional {.bonus}
 

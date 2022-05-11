@@ -18,6 +18,7 @@ output: html_document
 To perform reproducible research it is a good practice to store the files in a standardized location. 
 We will take advantage of the RStudio projects and store data files in a sub-folder called `data`. 
 This tutorial is meant to be completed as part of the repository that you use for all practicals of the R tidyverse workshop.
+
 ##### Prepare your project's folder
 
 1. Check that the project is active: the name you chose should appear on the top-right corner.

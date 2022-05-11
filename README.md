@@ -6,7 +6,7 @@ For the [rtidyverse](https://rworkshop.uni.lu) workshop
 
 1. Setup the RStudio environment by cloning the repository
 
-2. Install [`renv`](https://rstudio.github.io/renv/articles/renv.html) and `yaml` by running ``install.packages(c("renv", "yaml"))`
+2. Install [`renv`](https://rstudio.github.io/renv/articles/renv.html) and `yaml` by running `install.packages(c("renv", "yaml"))`
 
 3. Activate `renv` by running `renv::activate()`. 
 

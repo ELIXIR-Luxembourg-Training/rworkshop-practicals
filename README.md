@@ -53,8 +53,8 @@ Currently it is the following:
 
 ~~~
 ---
-title: "Datasaurus"
-author: "Aurelien Ginolhac"
+title: "My answers"
+author: "My name"
 date: "2022-05-12"
 ---
 ~~~

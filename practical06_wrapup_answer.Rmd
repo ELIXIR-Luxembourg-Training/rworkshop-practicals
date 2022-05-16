@@ -1,7 +1,7 @@
 ---
 title: "My answers"
 author: "My name"
-date: "2022-05-11"
+date: "2022-05-16"
 output: html_document
 ---
 
@@ -33,10 +33,11 @@ It is worth saying that the first scientist to discover the link between CO<sub>
 Due to extreme long time CO<sub>2</sub> remains in the atmosphere, looking at yearly emissions is of little interest.
 Especially since this is used by rich countries who got rid of most of their industry to justify little efforts.
 What matters is the **cumulative** emissions. For this, we will look at the data from the [World Bank](https://data.worldbank.org/indicator/EN.ATM.CO2E.PC).
-You will download this data as a ZIP archive (`API_EN.ATM.CO2E.PC_DS2_en_csv_v2_3731558.zip`) that contains 3 CSV.
+Unfortunately, they don't provide the 1960 - 2020 but 1990-2021, so please use my local copy linked below.
 
 
-##### Read the CSV `API_EN.ATM.CO2E.PC_DS2_en_csv_v2_3731558.csv`, assign the name `cum_co2`
+
+##### Read the CSV [`API_EN.ATM.CO2E.PC_DS2_en_csv_v2_3731558.csv`](https://r-training.pages.uni.lu/biostat1/projects/data/API_EN.ATM.CO2E.PC_DS2_en_csv_v2_3731558.csv), assign the name `cum_co2`
 
 ```{block, opts.label = "tip"}
 - If you look at the file, the first 4 lines are not of interest and should be skipped.
@@ -148,9 +149,9 @@ But there are missing values in columns, so pay attention to use the argument `n
 ```
 
 ```{r}
-owid_co2 <- read_csv("https://r-training.pages.uni.lu/biostat1/projects/data/owid-co2-data.csv",
-                     show_col_types = FALSE)
+# Write your answer here
 ```
+
 
 ##### Using the `co2` column, sum up per year the cumulative emission of carbon dioxide and find out when 50% of emissions were produced
 
@@ -178,13 +179,9 @@ to select only individual countries, select only `iso_code` that are **3** chara
 ```
 
 ```{r}
-owid_co2 |> 
-  filter(str_length(iso_code) == 3L) |>
-  group_by(country) |> 
-  summarise(co2_sum = sum(co2, na.rm = TRUE)) |> 
-  slice_max(co2_sum, n = 10) |> 
-  mutate(rank = row_number(), .before = 1L)
+# Write your answer here
 ```
+
 
 
 ```{r}

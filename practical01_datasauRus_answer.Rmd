@@ -1,11 +1,16 @@
 ---
 title: "My answers"
 author: "My name"
-date: "2022-05-11"
+date: "2023-02-12"
 output: html_document
 ---
 
+```{r setup, include = FALSE}
+library(tidyverse)
+```
 
+
+![](https://jumpingrivers.github.io/datasauRus/logo.png)
 
 
 This guided practical will demonstrate that the **tidyverse** allows to compute summary statistics and visualize datasets efficiently.
@@ -31,54 +36,45 @@ Since we are dealing with a `tibble`, we can type
 
 
 
-only the first **10** rows are displayed.
+Only the first **10** rows are displayed.
 
+```{r}
+datasaurus_dozen
+```
 
 ##### What are the dimensions of this dataset? Rows and columns?
 
 - **base** version, using either `dim()`, `ncol()` and `nrow()`
 
 ```{r}
-# Write your answer here
+# dim() returns the dimensions of the data frame, i.e number of rows and columns
+dim(datasaurus_dozen)
+# ncol() only number of columns
+ncol(datasaurus_dozen)
+# nrow() only number of rows
+nrow(datasaurus_dozen)
 ```
+
 
 
 - **tidyverse** version
 
 ```{r}
-# Write your answer here
+# Nothing to be done, a `tibble` display its dimensions, starting by a comment ('#' character)
 ```
 
 
 ##### Assign the `datasaurus_dozen` to the `ds_dozen` name. This aims at populating the **Global Environment**
 
 ```{r}
-# Write your answer here
+ds_dozen <- datasaurus_dozen
 ```
 
 
-##### Using Rstudio, those dimensions are now also reported within the interface, where?
-
-```{r}
-# Write your answer here
-```
 
 
 ## How many datasets are present?
 
-- **base** version
-
-```{block, opts.label = "tip"}
-You want to count the number of **unique** elements in the column **dataset**. The character `$` applied to a data.frame subset the column and convert the 2D structure to 1D, _i. e_ a vector.
-The function **length()** returns the length of a vector, such as the unique elements
-```
-
-```{r}
-# Write your answer here
-```
-
-
-- **tidyverse** version
 
 ```{r}
 # n_distinct counts the unique elements in a given vector.
@@ -87,14 +83,15 @@ The function **length()** returns the length of a vector, such as the unique ele
 summarise(ds_dozen, n = n_distinct(dataset))
 ```
 
-- even better, compute and display the number of lines per `dataset`
+
+- Even better, compute and display the number of lines per `dataset`
 
 ```{block, opts.label = "tip"}
-the function `count` in `dplyr` does the `group_by()` by the specified column + `summarise(n = n())` which returns the number of observation per defined group.
+The function `count` in `dplyr` does the `group_by()` by the specified column + `summarise(n = n())` which returns the number of observation per defined group.
 ```
 
 ```{r}
-# Write your answer here
+count(ds_dozen, dataset)
 ```
 
 
@@ -104,39 +101,84 @@ the function `count` in `dplyr` does the `group_by()` by the specified column + 
 ##### Compute the mean of the `x` & `y` column. For this, you need to `group_by()` the appropriate column and then `summarise()`
 
 ```{block, opts.label = "tip"}
-in `summarise()` you can define as many new columns as you wish. No need to call it for every single variable.
+In `summarise()` you can define as many new columns as you wish. No need to call it for every single variable.
 ```
 
 ```{r}
-# Write your answer here
+ds_dozen |>
+  group_by(dataset) |>
+  summarise(mean_x = mean(x),
+            mean_y = mean(y))
 ```
-
-
-```{r}
-# Write your answer here
-```
-
 
 
 ##### Compute both mean and standard deviation (sd) in one go using `across()` {.bonus}
 
 
 ```{r}
-# Write your answer here
+ds_dozen |>
+  # across works with first on which columns and second on what to perform on selection
+  # 2 possibilities to select columns
+  # summarise(across(where(is.double), list(mean = mean, sd = sd)))
+  # by default since v1.0.5, grouped variables are excluded from across
+  # summarise(across(everything(), list(mean = mean, sd = sd)))
+  # we can use the new .by argument instead of a group_by()
+  summarise(across(c(x, y), list(mean = mean, sd = sd)), .by = dataset)
 ```
 
+
+Alternative of `across()` using [pivoting](https://tidyr.tidyverse.org/articles/pivot.html):
 
 ```{r}
-# Write your answer here
+ds_dozen |> 
+  pivot_longer(cols = c(x, y),
+               # to get all x first, then the y instead of x/y mingled
+               cols_vary = "slowest",
+               names_to = "variables",
+               values_to = "values") |> 
+  summarise(means = mean(values),
+            sds = sd(values),
+            .by = c(dataset, variables)) |> 
+  print(n = Inf)
 ```
+
+
+
+##### Compute the Pearson correlation between x and y per dataset?
+
+```{r}
+# pearson is cor() default but worth making it clear
+summarise(ds_dozen, pearson_cor = cor(x, y, method = "pearson"), .by = dataset)
+```
+
+
+
+
+##### Perform a linear model of y explained by x per dataset
+
+Correlation is easy enough as it returns a double and takes vectors as input.
+For linear model, the R syntax `lm(y ~ x, data = dino)` makes it more complex to perform.
+
+One elegant solution is to use [functional programming](https://purrr.tidyverse.org/reference/index.html) and [nesting](https://tidyr.tidyverse.org/articles/nest.html).
+Combination with [`broom`](https://broom.tidymodels.org/) allows nice conversion of list  model output to rectangle `tibbles`.
+
+```{r}
+ds_dozen |>
+  nest(.by = dataset) |> 
+  mutate(lm = map(data, \(x) lm(x ~ y, data = x)),
+         glance_lm = map(lm, broom::glance),
+         r_squared = map_dbl(glance_lm, \(x) pull(x, r.squared)
+         )) 
+```
+
 
 
 
 ##### What can you conclude?
 
-```{r}
-# Write your answer here
-```
+All mean, standard deviations and correlations are the same for the 13 datasets.
+At least R^2 differ slightly.
+
 
 
 ## Plot the _datasauRus_
@@ -149,68 +191,49 @@ the `ggplot()` and `geom_point()` functions must be linked with a **+** sign
 ```
 
 ```{r}
-# Write your answer here
+ggplot(ds_dozen, aes(x = x, y = y)) +
+  geom_point()
 ```
 
 
 ##### Reuse the above command, and now colored by the `dataset` column
 
 ```{r}
-# Write your answer here
+ggplot(ds_dozen, 
+       aes(x = x, 
+           y = y, 
+           colour = dataset)) +
+  geom_point()
 ```
 
 
 Too many datasets are displayed.
 
-##### How can we plot only one at a time?
-
-```{block, opts.label = "tip"}
-You can filter for one dataset upstream of plotting
-```
+##### Plot one `dataset` per **facet**
 
 ```{r}
-# Write your answer here
+ds_dozen |>
+  ggplot(aes(x = x, y = y, colour = dataset)) +
+  geom_point() +
+  facet_wrap(~ dataset)
 ```
 
 
-##### Adjust the **filtering** step to plot two datasets
-
-```{block, opts.label = "tip"}
-R provides the inline instruction `%in%` to test if there a match in the left operand with the right one (a **vector** most probably)
-```
+##### Tweak the theme and use the `theme_void()` and remove the legend
 
 ```{r}
-# Write your answer here
-```
-
-
-##### Expand now by getting one `dataset` per **facet**
-
-```{r}
-# Write your answer here
-```
-
-
-##### Remove the filtering step to facet all datasets
-
-```{r}
-# Write your answer here
-```
-
-
-
-##### Tweak the theme and use the `theme_void` and remove the legend
-
-```{r}
-# Write your answer here
+ds_dozen |>
+  ggplot(aes(x = x, y = y, colour = dataset)) +
+  geom_point() +
+  theme_void() +
+  theme(legend.position = "none") +
+  facet_wrap(~ dataset, ncol = 3)
 ```
 
 
 ##### Are the datasets actually that similar?
 
-```{r}
-# Write your answer here
-```
+No ;) We were fooled by the summary stats
 
 
 
@@ -218,10 +241,18 @@ R provides the inline instruction `%in%` to test if there a match in the left op
 
 Plots can be animated, see for example what can be done with [`gganimate`](https://gganimate.com/).
 Instead of panels, **states** are made across `datasets` and **transitions** smoothed with an afterglow effect.
+This takes around 1 minute to be generated, we will see in `targets` [demo](https://gitlab.lcsb.uni.lu/aurelien.ginolhac/targets_demos) how to use an efficient workflow manager to smartly cache expensive steps.
 
-```{r}
-# Write your answer here
-```
+![](https://i.imgur.com/51GcnEp.png)
+
+
+## `targets`, a workflow manager for R
+
+[`targets`](https://github.com/ropensci/targets) is written by [William Landau](https://wlandau.github.io/about.html) and allows to create pipeline with connected dependencies depicted as follows:
+
+![](https://gitlab.lcsb.uni.lu/aurelien.ginolhac/targets_demos/-/raw/main/img/dag_linear.png)
+
+We will now present this along 3 examples of gradual complexity at this [repository for demos](https://gitlab.lcsb.uni.lu/aurelien.ginolhac/targets_demos). An optional lecture on Day4 will be presented for those who want to learn more about this.
 
 
 ## Conclusion
@@ -235,4 +266,4 @@ Instead of panels, **states** are made across `datasets` and **transitions** smo
 - George Fitzmaurice
 - Lucy McGowan
 
-from this [post](https://itsalocke.com/datasaurus-now-cran/)
+From this [post](https://itsalocke.com/datasaurus-now-cran/)

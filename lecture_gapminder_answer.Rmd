@@ -1,0 +1,252 @@
+---
+title: "Case study - gapminder"
+subtitle: "tidy models with `broom`"
+author: "My name"
+date: "2023-02-12"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+library(tidyverse)
+library(gapminder)
+```
+
+
+## Reminder of data rectangling
+
+```{r nest_by}
+palmerpenguins::penguins |>
+  # Nest only the relevant cols (bill measurements)
+  # and ID penguins with biology criteria
+  nest(data = starts_with("bill"), .by = c(island, species)) |>
+  mutate(model = map(data, \(x) lm(bill_depth_mm ~ bill_length_mm,
+                                   data = x)),
+         summary = map(model, summary),
+         r_squared = map_dbl(summary, pluck, "r.squared"))
+```
+
+
+## Explore gapminder
+
+- Install the `gapminder` package
+- Load `gapminder` and `tidyverse` packages
+- Use the pipe `|>` to pass `gapminder` to `ggplot()`
+- **Plot** the `life expectency` (`lifeExp` in `y`) ~ `year` (`x`)
+- Use `geom_line()`
+
+**Mind the grouping!**
+
+```{r}
+# write your answers here
+```
+
+## Keep related things together using list-column 
+
+- Add a column using `mutate()` named `year1950` which is:  
+`year` - 1950
+- Nest with `nest()` the tibble by `country` and `continent`
+- How many rows will you get?
+- Save the object as `by_country`
+
+```{r}
+# write your answers here
+```
+
+
+## One country example: Germany
+
+### From original tibble 
+
+```{r}
+gapminder |>
+  filter(country == "Germany") |>
+  select(-country, -continent)
+```
+
+```{r}
+by_country |>
+  filter(country == "Germany")
+by_country |>
+  filter(country == "Germany") |>
+  unnest(data)
+```
+
+## Explore a list column, counting
+
+From `by_country`
+
+- Count how many rows per country using the `data` column
+- Does any country have less rows than others?
+
+```{r}
+# write your answers here
+```
+
+## Explore a list column, plotting
+
+Plot `lifeExp` ~ `year1950` for **Bulgaria**
+
+- `filter()` for the desired country
+- `unnest()` raw `data`
+- Pipe to `ggplot()`
+
+```{r}
+# write your answers here
+```
+
+# What happens in the `data.frame`, STAYS in the `data.frame`
+
+## Add linear models 
+
+- Using `by_country`
+- Add a new column `model` with linear regressions of `lifeExp` on `year1950`
+- Save as `by_country_lm`
+
+Solution provided, if the tibble `by_country` was obtained successfully
+
+```{r}
+by_country_lm <- by_country |>
+  mutate(model = map(data, \(x) lm(lifeExp ~ year1950, data = x)))
+by_country_lm
+```
+
+## Explore nested tibble with lm
+
+### Rwanda
+
+From `by_country_lm`:
+
+- Display the R^2 for the linear model of **Rwanda**
+- How do you interpret the $R^2$ for this particular model?
+
+Hints:
+
+- `filter()` for the desired country
+- Use `map(model, summary)` to run `summary()` on the linear model
+- To extract the named `"r.squared"`, use the `map_dbl(summary, pluck, "r.squared")` `purrr` syntax
+
+```{r}
+# write your answers here
+```
+
+# Cleanup dirty objects with broom!
+
+```{r, echo = FALSE}
+htmltools::img(src = "https://raw.githubusercontent.com/tidymodels/broom/master/man/figures/logo.png",
+               style = "height:100px;position: absolute;top: 1em;right: 1em;")
+```
+
+## Tidying models
+
+- Install `broom` from .bold[CRAN]
+- Using `by_country_lm`, add 4 new columns:
+    + `glance`, using the broom function on the `model` column
+    + `tidy`, using the broom function on the `model` column
+    + `augment`, using the broom function on the `model` column
+    + `rsq` from the `glance` column
+- Save as `models`
+- Why extracting the $R^2$ in the main tibble is useful?
+
+Hint:
+
+- Use `map()` when dealing with a list column like for broom::glance(): `glance = map(model, glance)`
+
+```{r}
+# write your answers here
+```
+
+# Exploratory plots
+
+
+## Plotting $R^2$ for countries 
+
+- Plot `country` ~ `rsq` 
+- Color points per continent
+- **Reorder** country levels by $r^2$ (`rsq`): _snake plot_
+- Which continent shows most of the low $r^2$ values?
+
+Hints:
+
+- Use the `forcats` package
+- `fct_reorder(country, rsq)` to reorder based on the `rsq` continuous variable
+
+```{r}
+# write your answers here
+```
+
+## Display the raw life expectancy for countries with a low $R^2$ 
+
+- Focus on non-linear trends
+- Filter the 20 countries with the lowest $R^2$ 
+- `unnest` column `data`
+- Plot `lifeExp` ~ `year` with lines
+- Colour per continent
+- Facet per country
+- Same questions for the **top 20** $R^2$
+
+
+Lowest 20:
+
+```{r}
+# write your answers here
+```
+
+Top 20:
+
+```{r}
+# write your answers here
+```
+
+# Interpreting the linear model 
+
+## Regression 
+
+- What represents the **intercept**?
+    + Using `year1950`?
+    + Using `year`?
+    + Justify Hadley choice
+- What represents the **slope**?
+
+
+```{r, echo = FALSE, fig.height=5, fig.width=6}
+models |>
+  filter(country == "Germany") |>
+  unnest(data) |>
+  ggplot(aes(year1950, lifeExp)) +
+  geom_line() + labs(title = "Germany")
+```
+
+- Coefficients with predictor `year - 1950`
+```{r}
+filter(models, country == "Germany") |>
+  unnest(tidy) |>
+  select(continent, country, estimate)
+```
+- Compare with model and original years
+
+```{r}
+gapminder |>
+  filter(country == "Germany") |>
+  # Native placeholder: '_'
+  lm(lifeExp ~ year, data = _) |> 
+  tidy() |>
+  select(term, estimate)
+```
+
+# Summarise on one plot
+
+
+- Unnest coefficients (`tidy` column)
+    + Mind to keep the `continent`, `country` and `rsq` columns
+- Put **intercept** and **slope** in their own columns
+    + In **wide** format, only one value can be used. 
+    + Discard unused columns.
+- Plot `slope ~ intercept` (watch out the `(Intercept)` name which needs to be called between backticks)
+- Colour per continent
+- Size per $R^2$ (use for `scale_size_area()` for lisibility)
+- Add tendency with `geom_smooth(method = "loess")`
+
+```{r}
+# write your answers here
+```
+

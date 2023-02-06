@@ -1,7 +1,7 @@
 ---
 title: "My answers"
 author: "My name"
-date: "2022-05-11"
+date: "2023-02-01"
 output: html_document
 ---
 
@@ -10,7 +10,7 @@ output: html_document
 
 ## Part one - Judgment
 
-This short tutorial will allow you to explore `dplyr` functionality based on the previous lecture. Every question can be answered with a combination of `%>%` pipes. You should refrain from using temporary variables and statements outside of the range of the tidyverse.  
+This short tutorial will allow you to explore `dplyr` functionality based on the previous lectures. Every question can be answered with a combination of `|>` pipes. You should refrain from using temporary variables and any statements outside of the range of the tidyverse.  
 
 The first part does not require joins or pivots.
 
@@ -141,6 +141,11 @@ variant_significance <- tribble(
 
 
 ##### Try using semi-join or the `%in%` operator to achieve the same result. {.bonus}
+
+```{r}
+# Write your answer here
+```
+
 
 ```{r}
 # Write your answer here

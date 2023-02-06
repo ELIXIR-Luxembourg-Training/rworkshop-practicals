@@ -1,7 +1,7 @@
 ---
 title: "My answers"
 author: "My name"
-date: "2022-05-11"
+date: "2023-02-01"
 output: html_document
 ---
 
@@ -41,7 +41,6 @@ length(words)
 
 
 ##### Retrieve a boolean vector that indicates which words start with `y`
-
 
 ```{r}
 # Write your answer here
@@ -100,7 +99,7 @@ hepd <- readr::read_lines("https://biostat2.uni.lu/practicals/data/hepd.fasta")
 
 
 
-##### Find motifs in the sequence using `str_locate()`. 
+##### Find the positions of motifs in the sequence  
 
 Find all matches of the sequence $ATG$ in the sequence. 
 
@@ -109,4 +108,33 @@ Find all matches of the sequence $ATG$ in the sequence.
 ```
 
 
+
+##### Find motifs in the sequence using `str_locate()`. 
+
+
+
+## Tidyr `separate()`
+
+##### Use `tidyr`'s separate function
+
+Create the `dirty_frame` as below. Then split the `data` column into a `name` ,  `age` and `wealth` column.  
+
+There are other options to split the columns. This exercise is optional.
+
+
+```{r}
+dirty_frame <- tibble(id = seq(1, 5),
+                      data = c( "as-18-123", "bea-22-122.4", "d:9:201", 'fred-23-222', 'gunter=58=56'))
+```
+
+
+```{r}
+#| solution: true 
+separate_wider_regex(dirty_frame, data, c(name   = "\\w+", 
+                                          ".", 
+                                          age    = "\\d+",
+                                          ".",
+                                          wealth = "[\\d\\.]+"))
+
+```
 

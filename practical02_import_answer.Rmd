@@ -1,7 +1,7 @@
 ---
 title: "My answers"
 author: "My name"
-date: "2023-02-01"
+date: "2023-02-06"
 output: html_document
 ---
 
@@ -148,10 +148,10 @@ In the `col_types = cols(....)` you can use the columns bare names and either th
 ## Add the data and the changed Rmarkdown file to your Github repository
 
 You can use Git tab in RStudio or the command line as you prefer.
-
+  
 1. `Add` the new files. For now it is OK to also include the data file.
 2. Commit the new and the changed file. Choose a commit message.
-3. Pull from the repository
+3. Pull from the repository (this is just good practice)
 4. Push your changes to the repository.
 
 This is how all practicals in this workshop will be submitted. 
@@ -159,7 +159,7 @@ This is how all practicals in this workshop will be submitted.
 ```
 git add data/blood_fat.csv
 git commit -m "New data set"
-git add practical02_import.Rmd
+<<edit and finalise the exercise>>
 git commit -m "Solutions for import practical"
 git pull
 git push

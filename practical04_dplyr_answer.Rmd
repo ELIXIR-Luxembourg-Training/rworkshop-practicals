@@ -1,18 +1,17 @@
 ---
 title: "My answers"
 author: "My name"
-date: "2023-02-01"
+date: "2023-02-06"
 output: html_document
 ---
 
 
 
 
-## Part one - Judgment
+This tutorial allows you to explore `dplyr` functionality based on the individual lectures. Every question can be answered with a combination of `|>` pipes. Do not use temporary variables and any statements outside of the range of the tidyverse.  
 
-This short tutorial will allow you to explore `dplyr` functionality based on the previous lectures. Every question can be answered with a combination of `|>` pipes. You should refrain from using temporary variables and any statements outside of the range of the tidyverse.  
+## Part one - Base dplyr 
 
-The first part does not require joins or pivots.
 
 ##### Import the [data from the website](https://biostat2.uni.lu/practicals/data/judgments.tsv). 
 Assign to the name `judgments`
@@ -22,24 +21,25 @@ Assign to the name `judgments`
 ```
 
 
-##### Use `glimpse()` to identify columns and column types.
+##### Use `glimpse()` to identify columns and column types in `judgments`.
 
-##### Select all columns that refer to the STAI questionnaire
-
-```{r}
-# Write your answer here
-```
-
-
-##### Select all subjects older than 25
+##### Select all columns that refer to the STAI questionnaire.
 
 ```{r}
 # Write your answer here
 ```
 
 
-##### Retrieve all subjects younger than 20 which are in the stress group
+##### Retrieve all subjects younger than 20 which are in the stress group.
 The column for the group is `condition`.
+
+```{r}
+# Write your answer here
+```
+
+
+##### Arrange all observations by `STAI_pre` so that the subject with the lowest stress level is on top. 
+What is the subject in question?
 
 ```{r}
 # Write your answer here
@@ -53,36 +53,15 @@ The column for the group is `condition`.
 ```
 
 
-##### Normalize the values in the REI group
-Divide all entries in the REI questionnaire by 5, the maximal value.
+##### Create a new `STAI_pre_category` column.
+Use `case_when()` or `case_match()` to categorize values in `STAI_pre` as "low", "normal" or "high".
+For values < 25 in `STAI_pre` assign "low", for values > 65 assign "high", and for all other values assign "normal".
 
+To easily see the new column, use `relocate()` to move it to the first position of the dataframe.
 ```{r}
 # Write your answer here
 ```
 
-
-##### Compute the average and the standard deviation for all moral dilemma columns. 
-The resulting column names must contain the names of "avg" (for the average) and "sd"
-for the standard deviation. 
-
-```{r}
-# Write your answer here
-```
-
-
-#### Sort by groups
-
-Find the number of subjects by age, gender and condition, e.g. how many 20 years of age females are in the `stress` group. 
-Sort the resulting tibble such that the condition that contains the most populous group is sorted first (i.e. `stress` or `control` appear together). 
-
-```{r}
-# Write your answer here
-```
-
-
-##### Find the moral dilemma with the highest average score across all participants.
-
-The result must be a tibble containing the dilemma and the average such that the dilemma with the highest average in the first row. 
 
 ```{r}
 # Write your answer here
@@ -90,12 +69,79 @@ The result must be a tibble containing the dilemma and the average such that the
 
 
 
-## Part two - Variants
+##### Rescale values in the REI group
+Divide all entries in the REI questionnaire by 5, the maximal value, so the values will be between 0 and 1.
+
+`across()` allows modification of multiple columns in one go.
+
+```{r}
+# Write your answer here
+```
+
+<br>
+
+## Part two - Grouping and summarizing
+
+##### Use judgments to compute basic statistics for all moral dilemma columns considering the conditions. 
+1. Compute the mean, the median, the standard deviation as well as min and max values.
+2. Find meaningful short names for the functions such as `med` for `median()`.
+3. Assign `judgments_condition_stats` to the results.
+
+```{r}
+# Write your answer here
+```
+
+
+##### Sort by groups
+
+1. Find the number of subjects by age, gender and condition, e.g. how many 20 years of age females are in the `stress` group. 
+2. Sort the resulting tibble such that the condition that contains the most populous group is sorted first (i.e. `stress` or `control` appear together). 
+3. Ensure that the resulting tibble does not contain groups.
+
+```{r}
+# Write your answer here
+```
+
+
+
+<br>
+
+## Part three - joins and pivots
+
+### Judgements reprise
+
+
+
+##### Pivoting for readability
+Take the results from above that are available as `judgments_condition_stats` and bring the data into a more readable format.
+
+1. Make the table longer. After this step, your tibble should contain three columns:
+  * The condition
+  * the name of the moral dilemma and stats (in one column)
+  * the values of the stats by moral dilemma.
+2. Split the moral dilemma and stats column. You can use `separate_wider_delim` or `mutate` to create a column that contains the moral dilemma 
+(dog, trolley, etc) and the stats (median, min, etc.). 
+3. Make the table wider again and move the stats to individual columns.
+
+The final table should look something like this.
+
+condition |moral_dilemma| mean|sd |   ...
+:-------|:-----------|--:|-:|:--
+control   |  dog      |       7.24 |   2.23 |...
+stress     | wallet    |      7.4 |     2.01    |...
+
+```{r}
+# Write your answer here
+```
+
+
 
 ### Genetic variants
 
-##### Clean the table of genetic *variants* such that all variants appear as a column labeled by their position. 
-The format in the input is the reference allele, the position and the variant, commonly called alternative allele. In `T6G`, `T` is the reference allele, `6` is the position (along the gene) and `G` is the variant allele. 
+The `tribble` below contains changes of the sequence of a gene.
+The format in the input is the expected sequence (the _reference allele_), the position and the variant, commonly called _alternative allele_. 
+
+In `T6G`, `T` is the reference allele, `6` is the position (along the gene) and `G` is the variant allele. 
 ```{r}
 variants <- tribble(
   ~sampleid, ~var1, ~var2, ~var3,
@@ -107,8 +153,16 @@ variants <- tribble(
 
 ```
 
+
+##### Clean the table of genetic *variants* such that all variants appear as a column labeled by their position. 
+
 The table should look something like this.
 
+sampleid  	3 	5 	6 	...
+---------  --- --- --- ---
+    S1    	T 	G   G 	…
+    S2    	G 	G  NA 	…
+    S3    	… 	… 	… 	…
 
 
 ```{r}
@@ -116,12 +170,11 @@ The table should look something like this.
 ```
 
 
-#### Select relevant variants
+##### Select relevant variants
 
-Genetic variants are labeled according to their effect on stability of the gene product.  
+In this table the variants are labeled according to their effect on stability of the gene product. 
 
-##### Select the subjects in table *variants* that carry variants labeled as *damaging*. 
-The final output should be vector of sample ids.
+
 
 ```{r}
 variant_significance <- tribble(
@@ -135,12 +188,22 @@ variant_significance <- tribble(
 )
 ```
 
+##### Identify the subjects in the table `variants` that carry variants labeled as *damaging* in `variant_significance` table.
+
+The final output should be _vector_ of sample ids.
+
+
+
 ```{r}
 # Write your answer here
 ```
 
 
-##### Try using semi-join or the `%in%` operator to achieve the same result. {.bonus}
+
+ You can use several join flavours and the `%in%` operator to achieve the same result. 
+ 
+##### Try using `semi_join` and the `is.element()` function! {.bonus}
+
 
 ```{r}
 # Write your answer here

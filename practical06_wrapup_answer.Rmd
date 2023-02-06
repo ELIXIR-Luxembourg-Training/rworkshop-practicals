@@ -1,7 +1,7 @@
 ---
 title: "My answers"
 author: "My name"
-date: "2022-05-16"
+date: "2023-02-06"
 output: html_document
 ---
 
@@ -14,14 +14,14 @@ output: html_document
 ## Atmospheric carbon dioxide
 
 
-Carbon dioxide, CO<sub>2</sub> is as its name says, an oxide. Meaning, once in the atmosphere is it extremely stable
+Carbon dioxide, CO~2~ is as its name says, an oxide. Meaning, once in the atmosphere is it extremely stable
 and will remain there for thousands of years. Two main carbon sinks exist: forest, mainly trees that incorporate the carbon
  for their growth and oceans. The latter have absorbed approximately half of what humans have produce by burning oil,
- not without consequences. Oceans are getting warmer, making CO<sub>2</sub> solubility weaker and diminishes the pH.
+ not without consequences. Oceans are getting warmer, making CO~2~ solubility weaker and diminishes the pH.
  This acidification already killed half of the animals building coral reef ([91% as in 2022](https://www.theguardian.com/environment/2022/may/10/devastating-90-of-reefs-surveyed-on-great-barrier-reef-affected-by-coral-bleaching-in-2022)) and calcifying organisms.
- CO<sub>2</sub>, like methane is a greenhouse gas, absorbing and radiating infrared thermal energy 
+ CO~2~, like methane is a greenhouse gas, absorbing and radiating infrared thermal energy 
  leading to heat being trapped close to the ground. 
-It is worth saying that the first scientist to discover the link between CO<sub>2</sub> and heat trap was a woman [**Eunice Newton Foote**](https://en.wikipedia.org/wiki/Eunice_Newton_Foote) as early as 1856. [French version](https://fr.wikipedia.org/wiki/Eunice_Newton_Foote) of the Wikipedia page is more in line with the [Smithsonian article](https://www.smithsonianmag.com/science-nature/lady-scientist-helped-revolutionize-climate-science-didnt-get-credit-180961291/): she was not allowed to present her work because of her gender.
+It is worth saying that the first scientist to discover the link between CO~2~ and heat trap was a woman [**Eunice Newton Foote**](https://en.wikipedia.org/wiki/Eunice_Newton_Foote) as early as 1856. [French version](https://fr.wikipedia.org/wiki/Eunice_Newton_Foote) of the Wikipedia page is more in line with the [Smithsonian article](https://www.smithsonianmag.com/science-nature/lady-scientist-helped-revolutionize-climate-science-didnt-get-credit-180961291/): she was not allowed to present her work because of her gender.
 
 
 
@@ -30,7 +30,7 @@ It is worth saying that the first scientist to discover the link between CO<sub>
 
 ## Cumulative carbon dioxide emissions
 
-Due to extreme long time CO<sub>2</sub> remains in the atmosphere, looking at yearly emissions is of little interest.
+Due to extreme long time CO~2~ remains in the atmosphere, looking at yearly emissions is of little interest.
 Especially since this is used by rich countries who got rid of most of their industry to justify little efforts.
 What matters is the **cumulative** emissions. For this, we will look at the data from the [World Bank](https://data.worldbank.org/indicator/EN.ATM.CO2E.PC).
 Unfortunately, they don't provide the 1960 - 2020 but 1990-2021, so please use my local copy linked below.
@@ -146,6 +146,8 @@ Let's explore with another dataset from the famous [Our World in Data](https://o
 ```{block, opts.label = "tip"}
 This file comes already in a data format you can use straight away.
 But there are missing values in columns, so pay attention to use the argument `na.rm = TRUE` in your sums.
+
+Backup file hosted [here](https://r-training.pages.uni.lu/biostat1/projects/data/owid-co2-data.csv)
 ```
 
 ```{r}

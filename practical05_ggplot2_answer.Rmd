@@ -1,7 +1,7 @@
 ---
 title: "My answers"
 author: "My name"
-date: "2023-02-01"
+date: "2023-02-06"
 output: html_document
 ---
 
@@ -65,9 +65,9 @@ Be careful where the aesthetics are located, so the trend linear lines are **als
 
 ##### Adjust the aesthetics of point in order to
 
-- the `shape` map to the originated `island`
-- a fixed size of `3`
-- a transparency of 40%
+- The `shape` map to the originated `island`
+- A fixed size of `3`
+- A transparency of 40%
 
 ```{block,  opts.label = "tip"}
 You should still have only 3 coloured linear trend lines. Otherwise check to which layer your are adding the aesthetic `shape`.
@@ -163,7 +163,7 @@ Even if we have too many categories, we can appreciate the amount of `natural_di
 ##### Lump the reasons for deforestations, keeping only the top 5 reasons, lumping as "Other" the rest
 
 ```{block, opts.label = "tip"}
-- The function `fct_lump()` is very useful for this operation. Be careful to weight the categories with the appropriate continuous variable.
+- The function `fct_lump_n()` is very useful for this operation. Be careful to weight the categories with the appropriate continuous variable.
 - The legend of filled colours could be renamed and suppress if the title is explicit
 ```
 
@@ -173,17 +173,30 @@ Even if we have too many categories, we can appreciate the amount of `natural_di
 
 
 
-##### Optimize the previous plot by sorting the 5 main deforestation reasons {.bonus}
+##### Optimize the previous plot by sorting the main deforestation reasons
 
 ```{block, opts.label = "tip"}
-Unfortunately, `fct_infreq()` does not have a weight argument yet. 
-You need then to take care of this manually.
+Since v1.0.0, `fct_infreq()` does have a weight argument. 
 
+you can play with the `ordered` argument to get a viridis binned color scale
+```
+
+
+```{r}
+# Write your answer here
+```
+
+
+##### Optimize the previous plot by sorting the 5 main deforestation reasons {.bonus}
+
+
+```{block, opts.label = "tip"}
 One solution would be extract the top 5 main reasons using `dplyr` statements.
 
 Then use this vector to recode the `reasons` with the reason name when part of the top5 or `other` if not. Then `fct_reorder(reasons2, area_ha)` does the correct reordering. You might want to use
 `fct_rev()` to have the sorting from top to bottom in the legend.
 ```
+
 
 ```{r}
 # Write your answer here
@@ -318,14 +331,14 @@ Of note, `shape = 95` for dots is an hyphen shape.
 ```
 
 
-this is the final plot, where the following changes were made:
+This is the final plot, where the following changes were made:
 
-- labels of the `y` axis in absolute numbers
-- set `expand = c(0, 0)` on the `x` axis. see [stackoverflow's answer](http://stackoverflow.com/a/22945857/1395352)
-- use `theme_classic()`
-- set the legend on the top right corner. Use a mix of `legend.position` and `legend.justification` in a `theme()` call.
-- remove the label of the `x` axis, you could use _chromosomes_ if you prefer
-- change the color of the fill argument with `c("springgreen3", "steelblue2")`
+- Labels of the `y` axis in absolute numbers
+- Set `expand = c(0, 0)` on the `x` axis. see [stackoverflow's answer](http://stackoverflow.com/a/22945857/1395352)
+- Use `theme_classic()`
+- Set the legend on the top right corner. Use a mix of `legend.position` and `legend.justification` in a `theme()` call.
+- Remove the label of the `x` axis, you could use _chromosomes_ if you prefer
+- Change the color of the `fill` argument with `c("springgreen3", "steelblue2")`
 
 
 It is now obvious that we have mainly huge **deletions** on chromosome 10 and **amplifications** on chromosome 11.
@@ -338,7 +351,7 @@ affected by amplifications/deletions.
 
 
 ```{block,  opts.label = "tip"}
-the function `fct_lump` from _forcats_ ease lumping. Just pick `n = 5` to get the top 5 chromosomes 
+the function `fct_lump_n()` from _forcats_ ease lumping. Just pick `n = 5` to get the top 5 chromosomes 
 ```
 
 ```{r}

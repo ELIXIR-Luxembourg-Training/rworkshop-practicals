@@ -1,7 +1,7 @@
 ---
 title: "My answers"
 author: "My name"
-date: "2023-02-01"
+date: "2023-02-06"
 output: html_document
 ---
 
@@ -115,7 +115,7 @@ Find all matches of the sequence $ATG$ in the sequence.
 
 ## Tidyr `separate()`
 
-##### Use `tidyr`'s separate function
+##### Use `tidyr`'s separate function {.bonus}
 
 Create the `dirty_frame` as below. Then split the `data` column into a `name` ,  `age` and `wealth` column.  
 

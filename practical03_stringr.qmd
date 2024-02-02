@@ -1,0 +1,163 @@
+  ---
+title: "String manipulation"
+subtitle: ""
+author: "NN"
+date: "23 Oct. 2023"
+---
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+> This little tutorial aims to make you familiar with some of the functions of the `stringr` package and a few regular expressions. 
+> It consists of a few basic questions and an application provided by Prof. Emma Schymanski for the Master in Data Science.  
+
+
+## `stringr` functions 
+
+We will be using the `words` data that is built into `stringr`. 
+The data set is available to you if you load the package.
+
+```{r}
+# Write your solution
+```
+
+
+##### Select words that contain a `y`
+
+```{r}
+# Write your solution
+```
+
+##### Retrieve a boolean vector that indicates which words start with `y`
+
+
+```{r}
+# Write your solution
+```
+
+##### Retrieve the indices for all words containing `ch` within the word. 
+
+`ch` must not be present at the start or the end of the word. 
+
+```{r}
+# Write your solution
+```
+
+##### Extract the `y` and the previous character.
+
+Note: Use the function `unique()` around the results to avoid printing many empty matches.
+
+```{r}
+# Write your solution
+```
+
+
+## Virus Research 
+
+Read the genome sequence of the Hepatitis D virus: [hepd.fasta](https://biostat2.uni.lu/practicals/data/hepd.fasta).
+For now, just execute the following:
+
+```{r}
+hepd <- readr::read_lines("https://biostat2.uni.lu/practicals/data/hepd.fasta")
+```
+
+##### What is the length of the genome sequence?
+
+```{r}
+# Write your solution
+```
+
+##### What is the sequence composition? How often does each character occur?
+
+```{r}
+# Write your solution
+```
+
+##### Find all motifs in the sequence
+
+Find all matches of the sequence $ATG$ in the sequence. 
+
+```{r}
+# Write your solution
+```
+
+
+
+## Cheminformatics Research
+
+Cheminformatics manipulations in R can be challenging, as there are many
+string operations, also involving escape characters. 
+These exercises give some brief insights into cheminformatics with strings, 
+using a dataset of agrochemicals (pesticides) from PubChem. 
+
+```{r read_data}
+agro_data <- read_csv("data/PubChem_Agrochemicals_20231022.csv.gz")
+```
+
+
+#### How many of these agrochemicals are also drugs (pharmaceuticals)?
+Look in the `annothits` column for entries that have the tag 
+`Drug and Medication Information`.
+
+```{r agrodrugs}
+# Write your solution here
+```
+
+
+#### How many agrochemicals have stereochemistry information?
+Stereochemistry information is encoded in the `isosmiles` column and 
+detected by looking for `@` or `\` or `/` symbols. 
+
+```{r agro_with_stereo}
+# Write your solution here
+```
+
+
+#### What happens if you run this on the `canonicalsmiles` column instead?
+What does this tell you about Canonical SMILES?
+
+```{r canonical_smiles}
+# Write your solution here
+```
+
+
+#### Return the `canonicalsmiles` of all agrochemicals containing a triple bond
+Triple bonds are encoded by the `#` in the SMILES - canonical or isomeric.
+Use `str_view` to look at those that are also salts (encoded by `.`).
+
+```{r salts_and_triple_bonds}
+# Write your solution here
+```
+
+
+#### How many agrochemicals contain fluorine? 
+Hint: look at the `mf` column
+(molecular formula) and look for the element `F` but be careful, there
+are also agrochemicals containing iron (`Fe`) as well. 
+Look at the column contents to see how you can separate these entries. 
+
+```{r F-containing agrochem}
+# Write your solution here
+```
+
+
+#### Generate a list of the names of agrochemicals that have been contributed by Luxembourg contributors. 
+Use the `sidsrcname` column to detect Luxembourg. 
+
+```{r agrochem_from_lux}
+# Write your solution here
+```
+
+
+#### Finally, how many agrochemicals were contributed in 2023? 
+
+Use the `cidcdate`
+column, which is in `YYYYMMDD` format. 
+
+```{r agrochem_2023}
+# Write your solution here
+```
+
+

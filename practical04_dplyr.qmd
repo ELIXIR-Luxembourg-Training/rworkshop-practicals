@@ -24,6 +24,7 @@ Assign to the name `judgments`
 ##### Use `glimpse()` to identify columns and column types in `judgments`.
 
 ##### Select all columns that refer to the STAI questionnaire.
+Place `subject` column at the start of the table.
 
 ```{r}
 # Write your answer here
@@ -39,8 +40,9 @@ The column for the group is `condition`.
 
 
 ##### Arrange all observations by `STAI_pre` so that the subject with the lowest stress level is on top. 
-Place `STAI_pre` at the start of the table.
 What is the subject in question?
+
+Hint: `relocate()` could ease the identification of the subject.
 
 ```{r}
 # Write your answer here

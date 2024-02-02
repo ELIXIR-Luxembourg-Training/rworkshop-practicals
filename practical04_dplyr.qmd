@@ -39,6 +39,7 @@ The column for the group is `condition`.
 
 
 ##### Arrange all observations by `STAI_pre` so that the subject with the lowest stress level is on top. 
+Place `STAI_pre` at the start of the table.
 What is the subject in question?
 
 ```{r}

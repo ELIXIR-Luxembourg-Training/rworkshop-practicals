@@ -1,0 +1,161 @@
+---
+title: "Gapminder tutorial"
+name: "Your name here"
+data: 2024-02-07
+---
+
+
+```{r setup}
+library(tidyverse)
+library(broom)
+library(gapminder)
+library(forcats)
+```
+
+
+# Guided practical
+
+
+## Getting started
+- Load `gapminder` and `tidyverse` packages by running the `setup` chunk 
+- Use the pipe `|>` to pass `gapminder` to `ggplot()`
+- **Plot** the `life expectency` (`lifeExp` in `y`) ~ `year` (`x`)
+- Use `geom_line()`
+
+Mind the grouping! 
+
+```{r}
+
+```
+
+
+## Keep related things together using list-column 
+
+- Add a column using `mutate()` named `year1950` which is:  
+`year` - 1950
+- Nest with `nest_by()` the tibble by `country` and `continent`
+- How many rows will you get?
+- Save the object as `by_country`
+
+```{r}
+
+```
+
+
+
+## Add linear models 
+
+
+- Using `by_country`
+- Add a new column `model` with linear regressions of `lifeExp` on `year1950`
+- Save as `by_country_lm`
+
+```{r}
+
+```
+
+
+## Explore a list column 
+
+- Count the number of rows per country in the `data` column.
+- Does any country have less data than others?
+- Try writing a single statement that solves this questions! 
+
+```{r}
+
+```
+
+## Explore a list column by plotting 
+
+- Plot `lifeExp` ~ `year1950` for **Bulgaria** by unnesting `data`
+- `filter()` for the desired country
+- `unnest()` raw `data`
+- Pipe to `ggplot()`
+
+```{r}
+
+```
+
+
+## Display the `summary` for the linear model of **Rwanda**
+
+- How do you interpret the $R^2$ for this particular model?
+- `filter()` for the desired country
+- Use `list()` to run `summary()` on the linear model
+- To extract the named `"r.squared"`, use the `pluck(sumary, "r.squared")`,  `purrr` syntax
+
+```{r}
+
+
+```
+
+
+## Cleanup using `broom`
+
+- Check that  `broom` is loaded 
+- Using `by_country_lm`, add 4 new columns:
+    + `glance`, using the broom function on the `model` column
+    + `tidy`, using the broom function on the `model` column
+    + `augment`, using the broom function on the `model` column
+    + `rsq` from the `glance` column
+- Save as `models`
+- Why is extracting the $R^2$ in the main tibble is useful?
+- Use `list()` when dealing with a list column `rowwise` grouped
+
+```{r}
+
+```
+
+
+## Plotting $R^2$ for countries 
+
+- Plot `country` ~ `rsq` 
+- Color points per continent
+- **Reorder** country levels by $R^2$ (`rsq`): _snake plot_
+- Which continent shows most of the low $R^2$ values?
+- To reorder the discrete values of `country`:
+
+- Use the `forcats` package
+- `fct_reorder(country, rsq)` to reorder based on the `rsq` continuous variable
+
+```{r}
+
+```
+
+
+## Display the real data for countries with a low $R^2$ 
+
+- Focus on non-linear trends
+- Filter the 20 countries with the lowest $R^2$ 
+- `unnest` column `data`
+- Plot `lifeExp` ~ `year` with lines
+- Colour per continent
+- Facet per country
+- Same questions for the **top 20** $R^2$
+
+- You **must** `ungroup()` as we work currently by row.
+- `slice_min(col, n = 5)` returns the 5 minimal values of `col`
+
+```{r}
+
+```
+
+
+## Summarise on one plot
+
+
+- Unnest coefficients (`tidy` column)
+    + Mind to keep the `continent`, `country` and `rsq` columns
+- Put **intercept** and **slope** in their own columns
+    + In **wide** format, only one value can be used. 
+    + Discard unused columns.
+- Plot `slope ~ intercept` (watch out the `(Intercept)` name which needs to be called between backticks!
+- Colour per continent
+- Size per $R^2$ (use for `scale_size_area()` for readability)
+- Add tendency with `geom_smooth(method = "loess")`
+
+```{r}
+
+```
+
+

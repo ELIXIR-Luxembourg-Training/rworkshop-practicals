@@ -46,7 +46,7 @@ Say `y` to `Do you want to proceed? [y/N]:`. The `renv.lock` is created.
 
 #### Practical01 Datasaurus
 
-The Rmd document is already ready except for the header.
+The quarto document is already ready except for the header.
 
 
 Currently it is the following:
@@ -68,12 +68,14 @@ Your tasks:
 
 #### Other practicals
 
-Use the Rmarkdown templates in this repo by:
+Use the Quarto templates in this repo by:
 
 - Edit the header accordingly with your name
-- Fill out the answer in the R chunks (default filled with a comment `# Write your answer here`)
-- Knit the Rmd to check if everything works well
+- Answer the questions
+  - Code should go in the R chunks (default filled with a comment `# Write your answer here`) 
+  - Text answers should be provided in text with a quotation marker in front (`>`)
+- Knit the qmd to check if everything works well
 - If you use a new package (_i.e_ `palmerpenguis`), update the `renv.lock` with 
     + `renv::snapshot()`, new package are discovered, say `y` to `[yN]`
-    + `Git` add the `renv.lock`, along with the completed Rmd
+    + `Git` add the `renv.lock`, along with the completed qmd
     + `Git` push
